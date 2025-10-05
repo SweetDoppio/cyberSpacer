@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "types": ["node"],
+  "baseUrl": ".",
+  "paths": {
+    "@/*": ["src/*"],
+    "@/components/*": ["src/components/*"]
+  }
+},
+
+  "include": ["src", "**/*.ts", "**/*.tsx"]
+
+}
