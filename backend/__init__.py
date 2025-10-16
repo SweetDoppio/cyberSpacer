@@ -1,23 +1,34 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from flask_login import UserMixin, AnonymousUserMixin
+import os
+from dotenv import load_dotenv, find_dotenv
+from backend.extensions import db, migrate
+load_dotenv(find_dotenv())
 
-
-db = SQLAlchemy()
 
 def create_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./cyberdb.db'
-    app.config.from_prefixed_env()  # reads FLASK_* env vars if you want
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
-    db.init_app(app)
-    app.config['SECRET_KEY'] = "I'll never tell"
+    print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
-    migrate = Migrate(db.app)
-    from .routes import api_bp
-    app.register_blueprint(api_bp, url_prefix="/api")
+    app = Flask(__name__)
+#specifying the location of the sql database on local machine
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-only-change-me")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+
+    db.init_app(app)
+    migrate.init_app(app,db)
+
+    import backend.blueprint.models
+
+    from backend.blueprint.models.user import User  # add any other models
+
+    #blueprint Routes
+    #WHy is this shit so confusing.
+    from backend.blueprint.auth import auth_bp
+    from backend.blueprint.user_dashboard_group.routes import user_dashboard_group_bp
+    app.register_blueprint(auth_bp, url_prefix="/api/users")
+    app.register_blueprint(user_dashboard_group_bp, url_prefix="/api/user_dashboard_group")
 
     return app

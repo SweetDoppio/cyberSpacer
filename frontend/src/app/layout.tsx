@@ -9,7 +9,6 @@ import "./globals.css"
 export const metadata: Metadata = {
     title: "Cybernauts - Master Cybersecurity",
     description: "Navigate the digital frontier with expert cybersecurity training",
-    generator: "v0.app",
 }
 
 export default function RootLayout({

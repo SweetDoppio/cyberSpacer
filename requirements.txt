@@ -1,0 +1,13 @@
+uliweb-alembic
+blueprint
+flask-wtf
+werkzeug
+wtforms
+sqlalchemy
+Flask
+Flask-cors
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Login
+psycopg[binary]
+python-dotenv

@@ -1,6 +1,5 @@
-from flask import Blueprint
-
-auth_bp = Blueprint("auth",__name__,)
-
+from flask import Blueprint, jsonify
+from backend.blueprint.models.user import User
+from .routes import auth_bp
 
 

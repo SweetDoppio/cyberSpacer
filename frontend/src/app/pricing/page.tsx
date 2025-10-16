@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Shield, Check, Zap, Rocket, Crown, ChevronRight } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
+import {Header} from "@/components/ui/header"
 
 export default function PricingPage() {
     const parallaxRef = useRef<HTMLDivElement>(null)
@@ -80,7 +80,7 @@ export default function PricingPage() {
             id: "explorer",
             name: "Explorer",
             icon: Zap,
-            price: 29,
+            price: 5,
             period: "month",
             description: "Perfect for beginners starting their cybersecurity journey",
             color: "#4A668E",
@@ -99,7 +99,7 @@ export default function PricingPage() {
             id: "cybernaut",
             name: "Cybernaut Pro",
             icon: Rocket,
-            price: 79,
+            price: 9,
             period: "month",
             description: "For serious learners ready to advance their skills",
             color: "#E16237",
@@ -120,7 +120,7 @@ export default function PricingPage() {
             id: "enterprise",
             name: "Enterprise Fleet",
             icon: Crown,
-            price: 199,
+            price: 19,
             period: "month",
             description: "Ultimate package for professionals and teams",
             color: "#DBA64A",
@@ -150,6 +150,7 @@ export default function PricingPage() {
             <div ref={parallaxRef} className="parallax-container absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="parallax-layer">{generateStars(200)}</div>
             </div>
+            <Header className="sticky top-0 bg-black/40 backdrop-blur border-b border-[#4A668E]/20" />
 
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 {[...Array(30)].map((_, i) => (
@@ -167,37 +168,11 @@ export default function PricingPage() {
                 ))}
             </div>
 
-            <header className="relative z-10 px-6 py-4">
-                <nav className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="flex items-center space-x-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C92337] to-[#E16237] flex items-center justify-center">
-                            <Shield className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-white">Cybernauts</span>
-                    </Link>
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/" className="text-gray-300 hover:text-[#DBA64A] transition-colors">
-                            Home
-                        </Link>
-                        <Link href="#courses" className="text-gray-300 hover:text-[#DBA64A] transition-colors">
-                            Courses
-                        </Link>
-                        <Link href="#pricing" className="text-[#DBA64A] font-semibold">
-                            Pricing
-                        </Link>
-                        <Button
-                            variant="outline"
-                            className="border-[#4A668E] text-[#4A668E] hover:bg-[#4A668E] hover:text-white bg-transparent"
-                        >
-                            Sign In
-                        </Button>
-                    </div>
-                </nav>
-            </header>
-
             <section className="relative z-10 px-6 py-20">
                 <div className="max-w-7xl mx-auto text-center">
-                    <div className="animate-float mb-8">
+                    <div className="animate-float mb-8 flex items-center justify-center flex-col">
+                        <img src={"src/assets/img/cybernautLogo.png"} alt={"Cybernaut Logo or something"}/>
+
                         <Badge className="bg-[#2F4B7A] text-[#DBA64A] border-[#4A668E] mb-6">Choose Your Mission Level</Badge>
                     </div>
 

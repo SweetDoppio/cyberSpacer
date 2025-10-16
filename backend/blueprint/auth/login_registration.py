@@ -4,9 +4,8 @@ from wtforms.fields.numeric import IntegerField
 from wtforms.fields.simple import SubmitField, StringField
 from wtforms.validators import DataRequired, Email, EqualTo
 import sqlalchemy as sa
-from backend import db
-from backend.blueprint.models.students import User
-
+from backend import  db
+from backend.blueprint.models.user import User
 
 class LoginForm(FlaskForm):
     email = EmailField("email", validators=[DataRequired('Email required to log in')])
