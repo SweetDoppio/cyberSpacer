@@ -5,7 +5,6 @@ from wtforms.fields.simple import SubmitField, StringField
 from wtforms.validators import DataRequired, Email, EqualTo
 import sqlalchemy as sa
 from backend import  db
-from backend.blueprint.models.user import User
 
 class LoginForm(FlaskForm):
     email = EmailField("email", validators=[DataRequired('Email required to log in')])
@@ -21,7 +20,6 @@ class RegisterForm(FlaskForm):
     password_confirm =PasswordField('Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
-    def user_validation(self, email):
-        email = db.session.scalar(sa.Select(User).where(User.email == email.data))
+
 
 

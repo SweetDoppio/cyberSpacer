@@ -1,101 +1,27 @@
 "use client"
 
+import {ParallaxStarsbackground} from "@/components/ui/night_sky"
 import {Header} from "@/components/ui/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Shield, Zap, Users, Target, ChevronRight, Star, Code, Brain } from "lucide-react"
-import { useEffect, useRef } from "react"
+import {ILoveSmellingFeet} from "@/components/ui/footer";
+// import { useEffect, useRef } from "react"
 
 export default function CybernautsLanding() {
-    const parallaxRef = useRef<HTMLDivElement>(null)
-    const velocityRef = useRef({ x: 0, y: 0 })
-    const positionRef = useRef({ x: 0, y: 0 })
-    const animationRef = useRef<number>(2)
-    //I don't know how any of this math works. Just copied off from stackOverflow
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!parallaxRef.current) return
-
-            const { clientX, clientY } = e
-            const { innerWidth, innerHeight } = window
-
-            const xPercent = (clientX / innerWidth - 0.5) * 2
-            const yPercent = (clientY / innerHeight - 0.5) * 2
-
-            const targetX = -xPercent * 200
-            const targetY = -yPercent * 200
-
-            velocityRef.current.x += (targetX - positionRef.current.x) * 0.1
-            velocityRef.current.y += (targetY - positionRef.current.y) * 0.1
-        }
-
-        const animate = () => {
-            if (!parallaxRef.current) return
-
-            positionRef.current.x += velocityRef.current.x * 0.1
-            positionRef.current.y += velocityRef.current.y * 0.1
-
-            velocityRef.current.x *= 0.95
-            velocityRef.current.y *= 0.95
-
-            parallaxRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0)`
-
-            animationRef.current = requestAnimationFrame(animate)
-        }
-
-        window.addEventListener("mousemove", handleMouseMove)
-        animationRef.current = requestAnimationFrame(animate)
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove)
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current)
-            }
-        }
-    }, [])
-
-    const generateStars = (count: number) => {
-        return [...Array(count)].map((_, i) => {
-            const size = Math.random() < 0.7 ? "star-small" : Math.random() < 0.9 ? "star-medium" : "star-large";
-            return (
-                <div
-                    key={i}
-                    className={`star ${size}`}
-                    style={{
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`,
-                        animationDelay: `${Math.random() * 3}s`,
-                        animationDuration: `${2 + Math.random() * 4}s`,
-                    }}
-                />
-            )
-        })
-    }
-
     return (
         <div className="min-h-screen bg-black circuit-pattern relative overflow-hidden ">
-            <div ref={parallaxRef} className="parallax-container absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="parallax-layer">{generateStars(200)}</div>
-            </div>
+            <ParallaxStarsbackground
+                starCount={200}
+                glowCount={30}
+                strength={200}
+                smoothing={0.1}
+                friction={0.95}
+                className="z-0"
+            />
 
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(30)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute w-1 h-1 rounded-full animate-glow"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            backgroundColor: i % 4 === 0 ? "#C92337" : i % 4 === 1 ? "#E16237" : i % 4 === 2 ? "#DBA64A" : "#4A668E",
-                            animationDelay: `${Math.random() * 3}s`,
-                            animationDuration: `${3 + Math.random() * 2}s`,
-                        }}
-                    />
-                ))}
-            </div>
-
-            <Header className="sticky top-0 bg-black/40 backdrop-blur border-b border-[#4A668E]/20" />
+            <Header />
 
             {/* To logo section*/}
             <section className="relative z-10 px-6 py-20">
@@ -120,7 +46,7 @@ export default function CybernautsLanding() {
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Button
                             size="lg"
-                            className="bg-gradient-to-r from-[#C92337] to-[#E16237] hover:from-[#E16237] hover:to-[#DBA64A] text-white px-8 py-4 text-lg animate-pulse-glow"
+                            className="text-black px-8 py-4 text-lg animate-pulse-glow bg-amber-500"
                         >
                             Start Your Mission
                             <ChevronRight className="ml-2 w-5 h-5" />
@@ -128,7 +54,7 @@ export default function CybernautsLanding() {
                         <Button
                             size="lg"
                             variant="outline"
-                            className="border-[#4A668E] text-[#4A668E] hover:bg-[#4A668E] hover:text-white px-8 py-4 text-lg bg-transparent"
+                            className="border-[#4A668E] text-[#4A668E] hover:bg-[#4A668E]  hover:text-black px-8 py-4 text-lg bg-transparent"
                         >
                             Explore Courses
                         </Button>
@@ -351,18 +277,7 @@ export default function CybernautsLanding() {
                     </div>
                 </div>
             </section>
-
-            <footer className="relative z-10 px-6 py-12 border-t border-[#4A668E]/30">
-                <div className="max-w-7xl mx-auto text-center">
-                    <div className="flex items-center justify-center space-x-2 mb-6">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C92337] to-[#E16237] flex items-center justify-center">
-                            <Shield className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-white">Cybernauts</span>
-                    </div>
-                    <p className="text-gray-400">© 2025 Cybernauts. Navigating the digital frontier, one learner at a time.</p>
-                </div>
-            </footer>
+            < ILoveSmellingFeet className="mt-20" brand="Cybernauts" />
         </div>
     )
 }

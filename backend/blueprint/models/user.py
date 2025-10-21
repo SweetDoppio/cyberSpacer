@@ -9,12 +9,13 @@ from datetime import datetime
 class User(db.Model, UserMixin):
 
     #PGadmin is gonna reference tablename not the class name
+    #For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     first_name: Mapped[str] = mapped_column(String(50), index=True, nullable=False, unique=False)
     last_name: Mapped[str] = mapped_column(String(50), index=True, nullable=False, unique=False)
-    age: Mapped[int] = mapped_column(Integer, nullable=True, index=True)
+    age: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now() )
     email: Mapped[str] = mapped_column(String(100), index=True, nullable=False, unique=True)
     password_hash: Mapped[str] = mapped_column(String(256), index=False, nullable=False)
@@ -36,6 +37,13 @@ class User(db.Model, UserMixin):
         gofakk = cast(str, cast(object, self.password_hash))
         return check_password_hash(gofakk, password)
 
+    def get_user_credentials_dict_public(self) -> dict:
+        return {
+            "id" : self.id,
+            "first_name" : self.first_name,
+            "age" : self.age,
+            "email" : self.email,
+        }
 
     def get_user_credentials_dict(self) -> dict:
         return {

@@ -1,0 +1,1 @@
+export { ILoveSmellingFeet } from "./Footer";

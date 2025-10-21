@@ -1,79 +1,17 @@
 "use client"
-
+import {ParallaxStarsbackground} from "@/components/ui/night_sky"
+import {ILoveSmellingFeet} from "@/components/ui/footer";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Shield, Check, Zap, Rocket, Crown, ChevronRight } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import {  Check, Zap, Rocket, Crown, ChevronRight } from "lucide-react"
+import {useState } from "react"
 import {Header} from "@/components/ui/header"
 
 export default function PricingPage() {
-    const parallaxRef = useRef<HTMLDivElement>(null)
-    const velocityRef = useRef({ x: 0, y: 0 })
-    const positionRef = useRef({ x: 0, y: 0 })
+
     // @ts-ignore
-    const animationRef = useRef<number>()
     const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!parallaxRef.current) return
-
-            const { clientX, clientY } = e
-            const { innerWidth, innerHeight } = window
-
-            const xPercent = (clientX / innerWidth - 0.5) * 2
-            const yPercent = (clientY / innerHeight - 0.5) * 2
-
-            const targetX = -xPercent * 200
-            const targetY = -yPercent * 200
-
-            velocityRef.current.x += (targetX - positionRef.current.x) * 0.1
-            velocityRef.current.y += (targetY - positionRef.current.y) * 0.1
-        }
-
-        const animate = () => {
-            if (!parallaxRef.current) return
-
-            positionRef.current.x += velocityRef.current.x * 0.1
-            positionRef.current.y += velocityRef.current.y * 0.1
-
-            velocityRef.current.x *= 0.95
-            velocityRef.current.y *= 0.95
-
-            parallaxRef.current.style.transform = `translate3d(${positionRef.current.x}px, ${positionRef.current.y}px, 0)`
-
-            animationRef.current = requestAnimationFrame(animate)
-        }
-
-        window.addEventListener("mousemove", handleMouseMove)
-        animationRef.current = requestAnimationFrame(animate)
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove)
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current)
-            }
-        }
-    }, [])
-
-    const generateStars = (count: number) => {
-        return [...Array(count)].map((_, i) => {
-            const size = Math.random() < 0.7 ? "star-small" : Math.random() < 0.9 ? "star-medium" : "star-large"
-            return (
-                <div
-                    key={i}
-                    className={`star ${size}`}
-                    style={{
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`,
-                        animationDelay: `${Math.random() * 3}s`,
-                        animationDuration: `${2 + Math.random() * 4}s`,
-                    }}
-                />
-            )
-        })
-    }
 
     const plans = [
         {
@@ -147,27 +85,16 @@ export default function PricingPage() {
     // @ts-ignore
     return (
         <div className="min-h-screen bg-black circuit-pattern relative overflow-hidden">
-            <div ref={parallaxRef} className="parallax-container absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="parallax-layer">{generateStars(200)}</div>
-            </div>
-            <Header className="sticky top-0 bg-black/40 backdrop-blur border-b border-[#4A668E]/20" />
+            <ParallaxStarsbackground
+                starCount={200}
+                glowCount={30}
+                strength={200}
+                smoothing={0.1}
+                friction={0.95}
+                className="z-0"
+            />
 
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(30)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute w-1 h-1 rounded-full animate-glow"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            backgroundColor: i % 4 === 0 ? "#C92337" : i % 4 === 1 ? "#E16237" : i % 4 === 2 ? "#DBA64A" : "#4A668E",
-                            animationDelay: `${Math.random() * 3}s`,
-                            animationDuration: `${3 + Math.random() * 2}s`,
-                        }}
-                    />
-                ))}
-            </div>
-
+            <Header className=""/>
             <section className="relative z-10 px-6 py-20">
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="animate-float mb-8 flex items-center justify-center flex-col">
@@ -305,7 +232,7 @@ export default function PricingPage() {
                         {[
                             {
                                 q: "Can I switch plans anytime?",
-                                a: "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate the difference.",
+                                a: "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll refund the difference.",
                             },
                             {
                                 q: "Is there a free trial?",
@@ -317,7 +244,7 @@ export default function PricingPage() {
                             },
                             {
                                 q: "Do you offer student discounts?",
-                                a: "Yes! Students get 40% off any plan with a valid .edu email address.",
+                                a: "Yes! Students get 1% off any plan with a valid .edu email address.",
                             },
                         ].map((faq, index) => (
                             <Card
@@ -358,18 +285,7 @@ export default function PricingPage() {
                     </div>
                 </div>
             </section>
-
-            <footer className="relative z-10 px-6 py-12 border-t border-[#4A668E]/30">
-                <div className="max-w-7xl mx-auto text-center">
-                    <div className="flex items-center justify-center space-x-2 mb-6">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C92337] to-[#E16237] flex items-center justify-center">
-                            <Shield className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-white">Cybernauts</span>
-                    </div>
-                    <p className="text-gray-400">© 2025 Cybernauts. Navigating the digital frontier, one learner at a time.</p>
-                </div>
-            </footer>
+            < ILoveSmellingFeet className="mt-20" brand="Cybernauts" />
         </div>
     )
 }

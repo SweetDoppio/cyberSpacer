@@ -1,0 +1,1 @@
+export {ParallaxStarsbackground} from "./night_sky"
