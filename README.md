@@ -1,15 +1,33 @@
 # cyberSpacer
 
 
-TO create a shell terminal for viewing and adding database 
-#python -m flask --app backend:create_app shell
-
-python -m flask --app backend:create_app db migrate -m "message"
-python -m flask --app backend:create_app db upgrade
-
-SELECT u.*, s.*
-FROM users u
-JOIN user_stats s ON s.user_id = u.id
-ORDER BY 1;
-
-#For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
+                       .,,uod8B8bou,,.
+              ..,uod8BBBBBBBBBBBBBBBBRPFT?l!i:.
+         ,=m8BBBBBBBBBBBBBBBRPFT?!||||||||||||||
+         !...:!TVBBBRPFT||||||||||!!^^""'   ||||
+         !.......:!?|||||!!^^""'            ||||
+         !.........||||                     ||||
+         !.........||||  ##                 ||||
+         !.........||||                     ||||
+         !.........||||                     ||||
+         !.........||||                     ||||
+         !.........||||                     ||||
+         `.........||||                    ,||||
+          .;.......||||               _.-!!|||||
+.,uodWBBBBb.....||||       _.-!!|||||||||!:'
+!YBBBBBBBBBBBBBBb..!|||:..-!!|||||||!iof68BBBBBb....
+!..YBBBBBBBBBBBBBBb!!||||||||!iof68BBBBBBRPFT?!::   `.
+!....YBBBBBBBBBBBBBBbaaitf68BBBBBBRPFT?!:::::::::     `.
+!......YBBBBBBBBBBBBBBBBBBBRPFT?!::::::;:!^"`;:::       `.
+!........YBBBBBBBBBBRPFT?!::::::::::^''...::::::;         iBBbo.
+`..........YBRPFT?!::::::::::::::::::::::::;iof68bo.      WBBBBbo.
+  `..........:::::::::::::::::::::::;iof688888888888b.     `YBBBP^'
+    `........::::::::::::::::;iof688888888888888888888b.     `
+      `......:::::::::;iof688888888888888888888888888888b.
+`....:::;iof688888888888888888888888888888888899fT!
+  `..::!8888888888888888888888888888888899fT|!^"'
+`' !!988888888888888888888888899fT|!^"'
+    `!!8888888888888888899fT|!^"'
+`!988888888899fT|!^"'
+  `!9899fT|!^"'
+`!^"'

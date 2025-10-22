@@ -20,6 +20,7 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     return data as T
 }
 
+//hook for handling authentication
 export const AuthApi = {
     login: (email: string, password: string) =>
         api<{ user: PublicUser }>("/api/auth/login", {
@@ -47,4 +48,27 @@ export const AuthApi = {
         }
     },
 
+}
+
+export type UserStats = {
+    days_logged_in: number
+    last_login_date: string | null
+    current_level: number
+    total_xp: number
+    xp_in_level: number
+    xp_to_next: number
+    quizzes_completed: number
+    modules_completed: number
+}
+
+// hook for handling user stats
+export const StatsApi = {
+    touch: () => api<{ stats: UserStats }>("/api/user_dashboard/stats/touch", { method: "POST" }),
+    get: () => api<{ stats: UserStats }>("/api/user_dashboard/stats"),
+
+    earnXP: (amount: number) =>
+        api<{ stats: UserStats }>("/api/user_dashboard/stats/earn_xp", {
+            method: "POST",
+            body: JSON.stringify({ amount }),
+        }),
 }
