@@ -34,10 +34,13 @@ def create_app():
     #blueprint Routes
     #WHy is this shit so confusing.
     from backend.blueprint.auth import auth_bp
-    from backend.blueprint.user_dashboard_group.routes import user_dashboard_group_bp
-
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
+
+    from backend.blueprint.user_dashboard_group.routes import user_dashboard_group_bp
     app.register_blueprint(user_dashboard_group_bp, url_prefix="/api/user_dashboard_group")
+
+    from backend.blueprint.user_dashboard import stats_bp
+    app.register_blueprint(stats_bp, url_prefix="/api/user_dashboard")
 
     return app
 

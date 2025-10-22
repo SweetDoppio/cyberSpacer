@@ -1,0 +1,27 @@
+
+for editing users through the terminal
+python -m flask --app backend:create_app shell
+from backend.blueprint.models import User, UserStats
+from backend import db
+
+u = User.query.filter_by(email="rina@gmail.com").first()  # or .get(1)
+s = u.stats
+if s is None:
+    s = UserStats(); u.stats = s; db.session.add(s)
+
+s.total_xp = 69
+s.recompute_level_fields()
+db.session.commit()
+
+TO create a shell terminal for viewing and adding database
+#python -m flask --app backend:create_app shell
+
+python -m flask --app backend:create_app db migrate -m "message"
+python -m flask --app backend:create_app db upgrade
+
+SELECT u.*, s.*
+FROM users u
+JOIN user_stats s ON s.user_id = u.id
+ORDER BY 1;
+
+#For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
