@@ -1,10 +1,16 @@
 from backend.extensions import db
 from typing import Optional, cast
 from werkzeug.security import check_password_hash, generate_password_hash
-from sqlalchemy.orm import Mapped, mapped_column, relationship, declarative_base, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy import String, Boolean, Integer, ForeignKey
 from flask_login import UserMixin
+from typing import TYPE_CHECKING
 from datetime import datetime
+
+if TYPE_CHECKING:
+    from .stats import UserStats
+    from .items import UserItems
+    from .badges import Badge
 
 class User(db.Model, UserMixin):
 
@@ -19,6 +25,15 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now() )
     email: Mapped[str] = mapped_column(String(100), index=True, nullable=False, unique=True)
     password_hash: Mapped[str] = mapped_column(String(256), index=False, nullable=False)
+
+    # onne to one relational orm
+    stats: Mapped["UserStats"] = relationship(back_populates="user", uselist=False, cascade="all, delete-orphan")
+    items: Mapped["UserItems"] = relationship(back_populates="user",uselist=False, cascade="all ,delete-orphan")
+
+    # many2many relational orrm
+    badges: Mapped[list["Badge"]] = relationship(
+        secondary="user_badges", back_populates="users", lazy="selectin"
+    )
 
     @validates("first_name", "last_name")
     def set_name_to_lower_case(self,_key:str, value: str) -> str:

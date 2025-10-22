@@ -43,9 +43,13 @@ export  function AuthPage() {
                 setUser(user)
                 navigate("/dashboard", { replace: true })
             }
-        } catch (err:any) {
-            console.error("[AuthPage] submit error:", err)
-            setError(err?.message || "Login failed")
+        }catch (err: any) {
+            const msg = String(err?.message || "")
+            if (msg.includes("HTTP 401") || /invalid credentials/i.test(msg)) {
+                setError("Email or password is incorrect")
+            } else {
+                setError(msg || "Login failed")
+            }
         } finally {
             setLoading(false)
         }
@@ -53,7 +57,6 @@ export  function AuthPage() {
 
     return (
         <div className="min-h-screen bg-black circuit-pattern relative overflow-hidden flex items-center justify-center">
-            {/* make sure the background never intercepts clicks */}
             <ParallaxStarsbackground
                 starCount={200}
                 glowCount={30}
@@ -66,9 +69,7 @@ export  function AuthPage() {
             <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
                 <Card className="bg-[#2F4B7A]/40 border-[#4A668E]/50 backdrop-blur-sm overflow-hidden">
                     <CardContent className="p-0">
-                        {/* ✅ grid layout: no absolute stacking, no z-index traps */}
                         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[600px]">
-                            {/* Left visual (desktop only) */}
                             <div className={`relative hidden md:flex items-center justify-center transition-all duration-700 ${isSignUp ? "opacity-100" : "opacity-100"}`}>
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#C92337] via-[#E16237] to-[#DBA64A]" />
                                 <div className="relative z-10 flex flex-col items-center justify-center p-12 text-center pointer-events-none">
@@ -103,7 +104,6 @@ export  function AuthPage() {
                                     )}
 
                                     <form className="space-y-3" onSubmit={onSubmit} noValidate>
-                                        {/* Sign-Up only */}
                                         {isSignUp && (
                                             <>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -206,7 +206,7 @@ export  function AuthPage() {
                                         </Button>
                                     </form>
 
-                                    {/* Toggle */}
+                                    {/* Toggle fir form change */}
                                     <div className="mt-8 text-center">
                                         <p className="text-gray-400">
                                             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}

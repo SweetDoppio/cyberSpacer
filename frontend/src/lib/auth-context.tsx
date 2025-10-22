@@ -19,10 +19,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         ;(async () => {
             try {
-                const { user } = await AuthApi.me()      // <-- use guarded helper
+                const { user } = await AuthApi.me()
                 setUser(user ?? null)
             } catch (e) {
-                // 401, network error, non-JSON, etc.
+
                 setUser(null)
             } finally {
                 setLoading(false)
