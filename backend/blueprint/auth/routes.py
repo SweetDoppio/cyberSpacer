@@ -1,5 +1,5 @@
 from flask import render_template, redirect,url_for,current_app, Blueprint,request,template_rendered, Blueprint, jsonify
-from backend.blueprint.models import User
+from backend.blueprint.models import User, UserStats, UserItems
 from sqlalchemy.orm import load_only
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from backend.extensions import db
@@ -38,6 +38,8 @@ def register_user():
     db.session.add(user)
 
     try:
+        user.stats = UserStats()
+        user.items = UserItems()
         db.session.commit()
         return jsonify({"Success": "User has been successfully registered"}), 200
 
@@ -59,6 +61,10 @@ def login():
     if not user or not user.verify_password(pwd):
         return jsonify({"Login Error": "invalid credentials"}), 401
     login_user(user)  # sets session cookie
+    if not user.stats:
+        user.stats = UserStats()
+    UserStats.apply_login_streak(user.stats)
+    db.session.commit()
     return jsonify({"user": user.get_user_credentials_dict_public()}), 200
 
 

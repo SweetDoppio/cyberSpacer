@@ -8,6 +8,7 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
         ...init,
     })
 
+
     const text = await res.text()
     let data: any = null
     try { data = text ? JSON.parse(text) : null } catch (_) {}

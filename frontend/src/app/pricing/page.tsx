@@ -129,7 +129,6 @@ export default function PricingPage() {
                                 } ${plan.popular ? "md:scale-105 border-[#E16237]" : ""}`}
                                 style={{
                                     borderColor: plan.popular ? plan.color : undefined,
-                                    // ringColor: selectedPlan === plan.id ? plan.color : undefined,
                                 }}
                             >
                                 {plan.popular && (
@@ -232,7 +231,7 @@ export default function PricingPage() {
                         {[
                             {
                                 q: "Can I switch plans anytime?",
-                                a: "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll refund the difference.",
+                                a: "Nah",
                             },
                             {
                                 q: "Is there a free trial?",
