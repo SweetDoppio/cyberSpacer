@@ -88,7 +88,7 @@ export type LeaderboardResponse = {
     me: { rank: number; total_xp: number; current_level: number }
 }
 
-export const LeaderboardApi = {
+export const LeaderboardApi= {
     list: (limit = 5, offset = 0) =>
         api<LeaderboardResponse>(`/api/user_dashboard/leaderboard?limit=${limit}&offset=${offset}`),
 }

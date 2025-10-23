@@ -31,7 +31,7 @@ export function Dashboard() {
     // Mock user data
     const userMock = {
         badges: [
-            { name: "First Steps", icon: "🚀", color: "#C92337" },
+            { name: "First Stepss", icon: "🚀", color: "#C92337" },
             { name: "Network Master", icon: "🌐", color: "#E16237" },
             { name: "Ethical Hacker", icon: "🔓", color: "#DBA64A" },
             { name: "Threat Hunter", icon: "🎯", color: "#4A668E" },
