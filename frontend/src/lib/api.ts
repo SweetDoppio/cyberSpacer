@@ -72,3 +72,23 @@ export const StatsApi = {
             body: JSON.stringify({ amount }),
         }),
 }
+
+export type LeaderboardEntry = {
+    rank: number
+    user: { id: number; first_name: string; last_name: string }
+    total_xp: number
+    current_level: number
+}
+
+export type LeaderboardResponse = {
+    entries: LeaderboardEntry[]
+    limit: number
+    offset: number
+    total: number
+    me: { rank: number; total_xp: number; current_level: number }
+}
+
+export const LeaderboardApi = {
+    list: (limit = 5, offset = 0) =>
+        api<LeaderboardResponse>(`/api/user_dashboard/leaderboard?limit=${limit}&offset=${offset}`),
+}

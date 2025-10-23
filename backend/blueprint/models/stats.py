@@ -7,6 +7,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 from typing import cast
 from backend.extensions import db
 from datetime import datetime, timezone, date
+from sqlalchemy import Index
 
 if TYPE_CHECKING:
     from .user import User
@@ -17,14 +18,15 @@ GROWTH   = 1.8
 class UserStats(db.Model):
     __tablename__ = "user_stats"
     __table_args__ = (
-        CheckConstraint("days_logged_in >= 0",      name="ck_stats_days_logged_in_non_neg"),
-        CheckConstraint("quizzes_completed >= 0",   name="ck_stats_quizzes_non_neg"),
-        CheckConstraint("current_level >= 1",       name="ck_stats_current_level_min1"),
+        CheckConstraint("days_logged_in >= 0",name="ck_stats_days_logged_in_non_neg"),
+        CheckConstraint("quizzes_completed >= 0",name="ck_stats_quizzes_non_neg"),
+        CheckConstraint("current_level >= 1",name="ck_stats_current_level_min1"),
         #Not sure if wer have time to fully implement module based learning, uh oh.
-        CheckConstraint("modules_completed >= 0",   name="ck_stats_modules_non_neg"),
-        CheckConstraint("total_xp >= 0",            name="ck_stats_total_xp_non_neg"),
-        CheckConstraint("xp_in_level >= 0",         name="ck_stats_xp_in_level_non_neg"),
-        CheckConstraint("xp_to_next > 0",           name="ck_stats_xp_to_next_pos"),
+        CheckConstraint("total_xp >= 0",name="ck_stats_total_xp_non_neg"),
+        CheckConstraint("modules_completed >= 0", name="ck_stats_modules_non_neg", ),
+        CheckConstraint("xp_in_level >= 0", name="ck_stats_xp_in_level_non_neg"),
+        CheckConstraint("xp_to_next > 0", name="ck_stats_xp_to_next_pos"),
+        Index("ix_user_stats_total_xp", "total_xp")
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
