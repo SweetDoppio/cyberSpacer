@@ -298,7 +298,7 @@ export function Dashboard() {
                                     <div className="flex-1 flex flex-col items-center justify-center">
                                         <div className="h-64 w-8 bg-[#223150] rounded-full overflow-hidden border-2 border-[#4A668E]/50 flex flex-col-reverse">
                                             <div
-                                                className="w-full bg-gradient-to-t from-[#4A668E] to-[#DBA64A] transition-all duration-300"
+                                                className="w-full bg-gradient-to-t from-[#EA4354] to-[#3B99F1] transition-all duration-300"
                                                 style={{ height: `${oxygenLevel}%` }}
                                             />
                                         </div>
