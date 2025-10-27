@@ -29,18 +29,22 @@ def create_app():
         return jsonify({"error": "login required"}), 401
     import backend.blueprint.models
 
-    from backend.blueprint.models.user import User  # add any other models
+    from backend.blueprint.models.user import User
 
     #blueprint Routes
     #WHy is this shit so confusing.
     from backend.blueprint.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
-    from backend.blueprint.user_dashboard_group.routes import user_dashboard_group_bp
-    app.register_blueprint(user_dashboard_group_bp, url_prefix="/api/user_dashboard_group")
+    #Dont think I'll be using this
+    # from backend.blueprint.user_items.routes import user_dashboard_group_bp
+    # app.register_blueprint(user_dashboard_group_bp, url_prefix="/api/user_dashboard_group")
 
     from backend.blueprint.user_dashboard import stats_bp
     app.register_blueprint(stats_bp, url_prefix="/api/user_dashboard")
+
+    from backend.blueprint.user_items import user_items_bp
+    app.register_blueprint(user_items_bp, url_prefix="/api/user_items")
 
     return app
 

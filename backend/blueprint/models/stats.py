@@ -26,6 +26,7 @@ class UserStats(db.Model):
         CheckConstraint("modules_completed >= 0", name="ck_stats_modules_non_neg", ),
         CheckConstraint("xp_in_level >= 0", name="ck_stats_xp_in_level_non_neg"),
         CheckConstraint("xp_to_next > 0", name="ck_stats_xp_to_next_pos"),
+
         Index("ix_user_stats_total_xp", "total_xp")
     )
 
