@@ -164,9 +164,7 @@ export function Dashboard() {
                         </div>
                     </div>
 
-                    {/* 80/20 layout */}
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                        {/* LEFT: 80% column */}
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
                         <div className="lg:col-span-4 space-y-6">
                             {/* XP Bar */}
                             <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm">
@@ -291,12 +289,12 @@ export function Dashboard() {
                         </div>
 
                         {/* RIGHT: 20% column (sticky O₂ bar) */}
-                        <aside className="lg:col-span-1">
-                            <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm sticky top-6">
-                                <CardContent className="p-4 h-full flex flex-col">
+                        <aside className="lg:col-span-1 lg:self-stretch">
+                            <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm top-6 h-full">
+                                <CardContent className="p-4 flex flex-col h-full">
                                     <h3 className="text-sm font-semibold text-white mb-4 text-center">O₂ Level</h3>
                                     <div className="flex-1 flex flex-col items-center justify-center">
-                                        <div className="h-64 w-8 bg-[#223150] rounded-full overflow-hidden border-2 border-[#4A668E]/50 flex flex-col-reverse">
+                                        <div className="h-full w-8 bg-[#223150] rounded-full overflow-hidden border-2 border-[#4A668E]/50 flex flex-col-reverse">
                                             <div
                                                 className="w-full bg-gradient-to-t from-[#EA4354] to-[#3B99F1] transition-all duration-300"
                                                 style={{ height: `${oxygenLevel}%` }}
