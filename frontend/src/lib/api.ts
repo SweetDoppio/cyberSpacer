@@ -73,6 +73,7 @@ export const StatsApi = {
         }),
 }
 
+//defines type for the leaderboards
 export type LeaderboardEntry = {
     rank: number
     user: { id: number; first_name: string; last_name: string }
@@ -88,7 +89,30 @@ export type LeaderboardResponse = {
     me: { rank: number; total_xp: number; current_level: number }
 }
 
+//hook for leaderboards, also sets the display limit to 5.
 export const LeaderboardApi= {
     list: (limit = 5, offset = 0) =>
         api<LeaderboardResponse>(`/api/user_dashboard/leaderboard?limit=${limit}&offset=${offset}`),
+}
+
+export type Items = {
+    user_id: number
+    oxygen_level_amount: number
+    oxygen_cannisters: number
+    cap: number
+    max_cannisters: number
+}
+
+
+export const ItemsApi = {
+    items: () => api<Items>("/api/user_items/items"),
+    gain: (amount: number) =>
+        api<Items>("/api/user_items/items/gain-oxygen", {
+            method: "POST",
+            body: JSON.stringify({ amount }),
+        }),
+    use: () =>
+        api<Items>("/api/user_items/items/use-cannister", {
+            method: "POST",
+        }),
 }

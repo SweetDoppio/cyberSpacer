@@ -6,6 +6,7 @@ from sqlalchemy import select, func
 
 stats_bp = Blueprint("stats", __name__)
 
+
 def _ensure_stats() -> UserStats:
     s = getattr(current_user, "stats", None)
     if s is None:
