@@ -27,13 +27,15 @@ export  function AuthPage() {
         if (loading) return
         setError(null)
         setLoading(true)
-        console.log("[AuthPage] submit", { isSignUp, email })
+        // console.log("[AuthPage] submit", { isSignUp, email })
 
         try {
             if (isSignUp) {
                 if (!age.trim()) { setError("Age is required"); return }
                 const ageNum = parseInt(age, 10)
                 if (!Number.isInteger(ageNum) || ageNum < 1) { setError("Please enter a valid age (1+)"); return }
+                console.log("[AuthPage] will call", isSignUp ? "register" : "login")
+
                 const { user } = await AuthApi.register(firstName.trim(), lastName.trim(), email.trim(), ageNum, password)
                 setUser(user)
                 navigate("/dashboard", { replace: true })
@@ -77,7 +79,7 @@ export  function AuthPage() {
                                         <Shield className="w-12 h-12 text-white" />
                                     </div>
                                     <h2 className="text-3xl font-bold text-white mb-4">
-                                        {isSignUp ? "Welcome Aboard!" : "Welcome Back, Cybernaut"}
+                                        {isSignUp ? "Welcome Aboard!" : "Welcome Back, Cybernaut!"}
                                     </h2>
                                     <p className="text-gray-200 text-lg leading-relaxed max-w-sm">
                                         {isSignUp
@@ -87,7 +89,7 @@ export  function AuthPage() {
                                 </div>
                             </div>
 
-                            {/* Right form */}
+                            {/* Container for registration */}
                             <div className="relative p-12 flex items-center">
                                 <div className="max-w-md mx-auto w-full">
                                     <h1 className="text-3xl font-bold text-white mb-2">

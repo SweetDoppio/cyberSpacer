@@ -21,6 +21,12 @@ def get_all_users():
         return jsonify({wankery: "No users to load"})
     return jsonify([user.get_user_credentials_dict() for user in users]), 200
 
+
+PG_UNIQUE     = "23505"
+PG_NOT_NULL   = "23502"
+PG_CHECK_FAIL = "23514"
+PG_FK_VIOL    = "23503"
+
 @auth_bp.route("/register", methods=["POST"])
 def register_user():
     register_data = request.get_json(force=True) or {}
@@ -34,21 +40,66 @@ def register_user():
         return jsonify({"error": "missing fields"}), 400
 
     user = User(first_name=first, last_name=last, email=email, age=age)
-    user.set_password(pwd)
-    db.session.add(user)
 
     try:
-        user.stats = UserStats()
-        user.items = UserItems()
+        age_int_check = int(age)
+        if age_int_check < 2:
+            return jsonify({"error": "age must be >= 2"}), 400
+
+    except Exception:
+        return jsonify({"error": "age must be an integer"}), 400
+
+    user.set_password(pwd)
+    db.session.add(user)
+    db.session.flush()
+
+    stats = UserStats(
+        user_id=user.id,
+        days_logged_in=0,
+        quizzes_completed=0,
+        current_level=1,   # >= 1
+        modules_completed=0,
+        total_xp=0,
+        xp_in_level=0,
+        xp_to_next=100,    # > 0
+        last_login_date=None,
+    )
+    db.session.add(stats)
+
+    items = UserItems(
+        user_id=user.id,
+        oxygen_level_amount=0,
+        oxygen_cannisters=0,
+    )
+    db.session.add(items)
+    login_user(user)
+
+    try:
+        # user.stats = UserStats()
+        # user.items = UserItems()
         db.session.commit()
         return jsonify({"Success": "User has been successfully registered"}), 200
 
-    except IntegrityError:
+    except IntegrityError as e:
         db.session.rollback()
-        return jsonify({"error": "email already in use"}), 409
+        orig = getattr(e, "orig", None)
+        code = getattr(orig, "pgcode", None)
+        cname = getattr(getattr(orig, "diag", None), "constraint_name", None)
+        # Log to server console for fast diagnosis
+        print("REGISTER IntegrityError:", code, cname, str(orig))
 
-    login_user(user)
-    return jsonify({"user": user.get_user_credentials_dict_public()}), 201
+        if code == PG_UNIQUE:
+            # e.g. users_email_key or uq_users_email_ci
+            return jsonify({"error": "email already in use", "constraint": cname}), 409
+        if code == PG_NOT_NULL:
+            return jsonify({"error": "missing required fields", "constraint": cname}), 400
+        if code == PG_CHECK_FAIL:
+            return jsonify({"error": "check constraint failed", "constraint": cname}), 400
+        if code == PG_FK_VIOL:
+            return jsonify({"error": "foreign key violation", "constraint": cname}), 400
+        return jsonify({"error": "integrity error", "code": code, "constraint": cname}), 400
+
+
 
 @auth_bp.post("/login")
 def login():

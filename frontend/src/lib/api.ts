@@ -29,6 +29,7 @@ export const AuthApi = {
         }),
 
     register: (first: string, last: string, email: string, age: number, password: string) =>
+
         api<{ user: PublicUser }>("/api/auth/register", {
             method: "POST",
             body: JSON.stringify({ first_name: first, last_name: last, email, age, password }),
