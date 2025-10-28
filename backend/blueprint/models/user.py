@@ -41,7 +41,7 @@ class User(db.Model, UserMixin):
 
     @validates("email")
     def set_email_to_lower_case(self,_key:str, value: str) -> str:
-        return value.strip().lower()
+        return (value or "").strip().lower()
 
     def set_password(self, password: str) -> None:
         self.password_hash = generate_password_hash(password,method='scrypt' ,salt_length=30)
