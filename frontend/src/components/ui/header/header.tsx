@@ -15,7 +15,7 @@ type HeaderProps = {
     className?: string
 }
 
-const baseLink = "text-black hover:text-red-500 transition-colors"
+const baseLink =   "inline-block rounded-[10px] border-2 p-2 border-transparent hover:border-red-500 text-black transition-colors";
 const activeLink = "text-red"
 
 export function Header({

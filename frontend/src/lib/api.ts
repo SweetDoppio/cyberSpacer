@@ -96,6 +96,7 @@ export const LeaderboardApi= {
         api<LeaderboardResponse>(`/api/user_dashboard/leaderboard?limit=${limit}&offset=${offset}`),
 }
 
+//for user_items
 export type Items = {
     user_id: number
     oxygen_level_amount: number

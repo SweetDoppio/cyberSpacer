@@ -25,3 +25,14 @@ JOIN user_stats s ON s.user_id = u.id
 ORDER BY 1;
 
 #For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
+
+
+
+from backend.extensions import db
+from backend.blueprint.models.user import User
+from backend.blueprint.models.stats import UserStats
+
+u = db.session.execute(db.select(User).where(User.email=='moisty123@gmail.com')).scalar_one()
+s = db.session.execute(db.select(UserStats).where(UserStats.user_id==u.id)).scalar_one()
+s.days_logged_in +=22
+db.session.commit()

@@ -23,6 +23,7 @@ export function Dashboard() {
     const [myRank, setMyRank] = useState<number | null>(null)
     const [items, setItems] = useState<Items | null>(null)
 
+    // displays logged in first_namee
     const displayName =
         user?.first_name ??
         (user as any)?.firstName ??
@@ -105,12 +106,22 @@ export function Dashboard() {
     }
     if (!stats) return null
 
+    //  variables for canisters and  02 levels
     const oxygenLevel   = items?.oxygen_level_amount ?? 0
     const canisters     = items?.oxygen_cannisters ?? 0
     const maxCanisters  = items?.max_cannisters ?? 4
+    // will check to see if user has max cannisters, if state if true, then disable quiz button
+    const isO2Maxed      = canisters >= maxCanisters
+    // checker to see if streak has been reset or just started for new user
+    const isStreakDayOne = (stats?.days_logged_in ?? 0) === 1
 
     const pct = Math.min(100, Math.round((stats.xp_in_level / Math.max(1, stats.xp_to_next)) * 100))
 
+    // Makes sure no other way to quiz is accessible by accident
+    const handleStartQuiz = () => {
+        if (isO2Maxed) return
+            navigate("/quiz")
+    }
     return (
         <div className="min-h-screen bg-black circuit-pattern relative overflow-hidden">
             <ParallaxStarsbackground
@@ -123,11 +134,10 @@ export function Dashboard() {
             />
 
             <Header />
-
             {/* Main Content */}
             <main className="relative z-10 px-6 py-8">
                 <div className="max-w-7xl mx-auto space-y-8">
-                    {/* Welcome Section (unchanged) */}
+                    {/* Welcome Section */}
                     <div className="mb-2 flex items-center justify-between">
                         <div>
                             <h1 className="text-4xl font-bold text-white mb-2">
@@ -136,13 +146,17 @@ export function Dashboard() {
                             <p className="text-gray-300">Keep pushing your cybersecurity journey forward</p>
                         </div>
 
-                        {/* Cannisters summary */}
+                        {/* Canisters div  */}
                         <div className="flex items-center space-x-6">
-                            <Button className="bg-gradient-to-r from-[#C92337] to-[#E16237] hover:from-[#E16237] hover:to-[#DBA64A] text-white font-semibold px-6 py-2 rounded-lg flex items-center space-x-2">
+                            <Button onClick={handleStartQuiz} disabled={isO2Maxed} title={isO2Maxed ? "You're at max canisters! " : undefined}
+                                    className={`bg-gradient-to-r from-[#C92337] to-[#E16237] text-white font-semibold px-6 py-2 rounded-lg flex items-center space-x-2
+                                        hover:from-[#E16237] hover:to-[#DBA64A]
+                                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#C92337] disabled:hover:to-[#E16237]`}>
                                 <BookOpen className="w-5 h-5" />
                                 <span>Start Quiz</span>
                             </Button>
-                            <div className="flex items-center space-x-3 bg-[#2F4B7A]/30 border border-[#4A668E]/50 rounded-lg px-4 py-3 backdrop-blur-sm">
+                            {/*div container for user_stat canister*/}
+                            <div className="flex items-center space-x-3 bg-[#2F4B7A]/30 border border-[#F2F2F2] rounded-lg px-4 py-3 backdrop-blur-sm">
                                 <div className="flex space-x-2">
                                     {[...Array(maxCanisters)].map((_, i) => (
                                         <div
@@ -153,20 +167,21 @@ export function Dashboard() {
                                                     : "bg-gray-600/30 border border-gray-500/30"
                                             }`}
                                         >
+                                            {/* If I have time, get a proper oxygen container. But milk bottles are kinda funny also.*/}
                                             <Milk className={`w-5 h-5 ${i < canisters ? "text-white" : "text-gray-500"}`} />
                                         </div>
                                     ))}
                                 </div>
                                 <span className="text-white font-semibold ml-2">
-            {canisters}/{maxCanisters}
-          </span>
+                                    {canisters}/{maxCanisters}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
                         <div className="lg:col-span-4 space-y-6">
-                            {/* XP Bar */}
+                            {/* Xp Bar. Add picture later if I can */}
                             <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm">
                                 <CardContent className="p-6">
                                     <div className="flex items-center justify-between mb-4">
@@ -186,6 +201,8 @@ export function Dashboard() {
                                             style={{ width: `${pct}%` }}
                                         />
                                     </div>
+
+                                    {/*testing button div*/}
                                     <div className="mt-4">
                                         <Button
                                             variant="outline"
@@ -207,19 +224,21 @@ export function Dashboard() {
                                 <Card className="flex items-center justify-center bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm">
                                     <CardContent className="p-3">
                                         <div className="flex items-center space-x-4">
-                                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#E16237] to-[#DBA64A] flex items-center justify-center animate-pulse-glow">
-                                                <Flame className="w-8 h-8 text-white" />
+                                            <div className={`w-16 h-16 rounded-full flex items-center justify-center ${isStreakDayOne ? "bg-[#FCFCFC]" : "border-3 border-solid border-amber-500"}` }>
+                                                <Flame className={`w-8 h-8 ${isStreakDayOne ? "text-gray-600" : "text-[#FF9436]"}`} />
                                             </div>
                                             <div>
-                                                <p className="text-gray-300 text-2xl">Login Streak</p>
+                                                <p className="text-gray-300 text-sm">Login Streak</p>
                                                 <p className="text-4xl font-bold text-[#DBA64A]">{stats.days_logged_in}</p>
                                                 <p className="text-gray-400 text-xs">days in a row</p>
+                                                {/*Returns the p tag if true, otherwise its null, and does not render anything*/}
+                                                {isStreakDayOne && (<p className="text-xs mt-1 text-[#DBA64A]"> Log back tomorrow to start your streak!!</p>)}
                                             </div>
                                         </div>
                                     </CardContent>
                                 </Card>
 
-                                {/* Badges */}
+                                {/* Badges. Rightnow its just hardcoded.  */}
                                 <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm">
                                     <CardContent className="p-6">
                                         <h3 className="text-xl font-semibold text-white mb-4">Achievements</h3>
@@ -261,6 +280,7 @@ export function Dashboard() {
                                                     <div
                                                         className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white"
                                                         style={{
+                                                            // dds
                                                             backgroundColor:
                                                                 entry.rank === 1 ? "#DBA64A" :
                                                                     entry.rank === 2 ? "#E16237" :
@@ -288,7 +308,7 @@ export function Dashboard() {
                             </Card>
                         </div>
 
-                        {/* RIGHT: 20% column (sticky O₂ bar) */}
+                        {/* The oxygen meter bar. */}
                         <aside className="lg:col-span-1 lg:self-stretch">
                             <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm top-6 h-full">
                                 <CardContent className="p-4 flex flex-col h-full">
@@ -326,7 +346,6 @@ export function Dashboard() {
                     </div>
                 </div>
             </main>
-
             <ILoveSmellingFeet/>
     </div>
     )

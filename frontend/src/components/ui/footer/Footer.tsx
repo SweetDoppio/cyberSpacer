@@ -1,7 +1,6 @@
 "use client";
 
-import { Shield } from "lucide-react";
-
+//Type definition for footer
 type FooterProps = {
     className?: string;
     brand?: string;
@@ -12,9 +11,9 @@ export function ILoveSmellingFeet({ className = "", brand = "Cybernauts", year =
     return (
         <footer className={`relative z-10 px-6 py-12 border-t border-[#4A668E]/30 ${className}`}>
             <div className="max-w-7xl mx-auto text-center">
-                <div className="flex items-center justify-center space-x-2 mb-6">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C92337] to-[#E16237] flex items-center justify-center">
-                        <Shield className="w-5 h-5 text-white" />
+                <div className="flex items-center justify-center  mb-6">
+                    <div className="w-30 h-30 rounded-lg  flex items-center justify-center">
+                        <img src={"src/assets/img/cybernautLogo-no-text.png"} alt={"YUGE rocket logo"} className="w-25 h-15"/>
                     </div>
                     <span className="text-2xl font-bold text-white">{brand}</span>
                 </div>
