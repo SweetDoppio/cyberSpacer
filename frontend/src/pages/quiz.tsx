@@ -16,8 +16,8 @@ export default function QuizPage() {
     const [attemptId, setAttemptId] = useState<string>("")
     const [questions, setQuestions] = useState<QuizQuestionClient[]>([])
     const [i, setI] = useState(0)
-    const [isAnswered, setIsAnswered] = useState(false);          // <-- boolean
-    const [answers, setAnswers] = useState<Record<string,string>>({}); // <-- per-question map
+    const [isAnswered, setIsAnswered] = useState(false);
+    const [answers, setAnswers] = useState<Record<string,string>>({});
     const [selected, setSelected] = useState<string | null>(null)
     const [correctId, setCorrectId] = useState<string | null>(null)
     const [explanation, setExplanation] = useState<string | null>(null)
@@ -62,6 +62,7 @@ export default function QuizPage() {
         setExplanation(res.explanation || null);
     }
 
+    // function for the quiz button after answerng
     function next() {
         if (i < questions.length - 1) {
             setI(i + 1);
