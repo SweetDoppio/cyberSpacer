@@ -1,6 +1,6 @@
 // src/lib/auth-context.tsx
 import { createContext, useContext, useEffect, useState } from "react"
-import { AuthApi, type PublicUser } from "@/lib/api"   // <-- reuse the type from api.ts
+import { AuthApi, type PublicUser } from "@/lib/api"
 
 type AuthCtx = {
     user: PublicUser | null
@@ -46,14 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(null)
         }
     }
-
     return (
         <Ctx.Provider value={{ user, loading, setUser, refresh, logout }}>
             {children}
         </Ctx.Provider>
     )
 }
-
 export function useAuth() {
     const v = useContext(Ctx)
     if (!v) throw new Error("useAuth must be used inside <AuthProvider>")
