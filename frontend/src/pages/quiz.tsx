@@ -46,6 +46,7 @@ export default function QuizPage() {
         )
     }
 
+    // variables for progress check, results
     const q = questions[i]
     const progressPct = ((i + 1) / questions.length) * 100
     const accuracy = Math.round((correctCount / questions.length) * 100)
@@ -108,8 +109,8 @@ export default function QuizPage() {
                                 <div className="flex justify-between items-center mb-2">
                                     <h2 className="text-2xl font-bold text-white">{q.text}</h2>
                                     <span className="text-[#DBA64A] font-semibold">
-                      {correctCount}/{i} Correct
-                    </span>
+                                        {correctCount}/{i} Correct
+                                    </span>
                                 </div>
                                 <div className="w-full bg-[#223150] rounded-full h-2 overflow-hidden border border-[#4A668E]/50">
                                     <div className="h-full bg-gradient-to-r from-[#C92337] to-[#E16237] transition-all" style={{ width: `${progressPct}%` }} />
@@ -136,8 +137,7 @@ export default function QuizPage() {
                                             disabled={isAnswered}
                                             className={`${classes} ${isAnswered ? "cursor-not-allowed" : "cursor-pointer"}`}
                                             aria-pressed={isSelected}
-                                            aria-describedby={isCorrect ? `correct-${o.id}` : undefined}
-                                        >
+                                            aria-describedby={isCorrect ? `correct-${o.id}` : undefined}>
                                             <span className={`text-lg ${isCorrect ? "text-[#DBA64A]" : isWrongSelected ? "text-[#E16237]" : "text-white"}`}>{o.text}</span>
                                             {isCorrect && (
                                                 <span id={`correct-${o.id}`} className="ml-2 text-sm text-[#DBA64A] font-semibold">
@@ -151,7 +151,6 @@ export default function QuizPage() {
                                     )
                                 })}
                             </div>
-
                             {isAnswered && explanation && (
                                 <div className={`p-4 rounded-lg border mb-8 ${selected === correctId ? "bg-[#4A668E]/20 border-[#DBA64A]/50" : "bg-[#C92337]/20 border-[#C92337]/50"}`}>                                    <p className="text-gray-200 text-sm">
                                         <span className="font-semibold text-[#DBA64A]">Explanation: </span>
@@ -159,7 +158,6 @@ export default function QuizPage() {
                                     </p>
                                 </div>
                             )}
-
                             {isAnswered && (
                                 <Button onClick={i === questions.length - 1 ? submit : next}
                                         className="w-full bg-gradient-to-r from-[#C92337] to-[#E16237] hover:from-[#E16237] hover:to-[#DBA64A] text-white">
@@ -174,6 +172,7 @@ export default function QuizPage() {
                         <CardContent className="p-8 text-center">
                             <h2 className="text-4xl font-bold text-white mb-2">Quiz Complete!</h2>
                             <p className="text-gray-300 mb-8">Accuracy: <b className="text-[#E16237]">{accuracy}%</b></p>
+                            {/*Clear up this bit better later...*/}
                             {accuracy >= 90 ? <span className={"results_response"}>Wow, You're a real Cybernaut!</span> : accuracy < 89 && accuracy >= 60 ? <span className={"results_response"}> Not bad...
                                 </span> : accuracy <=59  && accuracy > 30 ? <span className={"results_response"}> Well, could be a lot worse...</span> : <span className={"results_response"}> You're on your way to get ejected out of the ship...</span>}
 
