@@ -10,7 +10,6 @@ import {ILoveSmellingFeet} from "@/components/ui/footer";
 
 import {QuizApi, type QuizQuestionClient} from "@/lib/api";
 
-type AnswersMap = Record<string, string>
 
 
 export default function QuizPage() {
@@ -26,12 +25,10 @@ export default function QuizPage() {
     const [complete, setComplete] = useState(false)
 
     const [error, setError] = useState<string | null>(null)
-
-    // Load sanitized quiz from backend
     useEffect(() => {
         ;(async () => {
             try {
-                const { attempt_id, quiz } = await QuizApi.start("QuizMe")
+                const { attempt_id, quiz } = await QuizApi.start("QuizMe", 10)
                 setAttemptId(attempt_id)
                 setQuestions(quiz.questions)
             } catch (e: any) {
@@ -68,7 +65,7 @@ export default function QuizPage() {
         if (i < questions.length - 1) {
             setI(i + 1);
             setSelected(null);
-            setIsAnswered(false);        // <-- reset boolean
+            setIsAnswered(false);
             setCorrectId(null);
             setExplanation(null);
         } else {

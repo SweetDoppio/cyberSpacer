@@ -136,7 +136,7 @@ export type AnswerResult = {
 }
 
 export const QuizApi = {
-    start: (slug: string, limit: 10) =>
+    start: (slug: string, limit = 10) =>
         api<QuizStartResp>("/api/quiz/start", {
             method: "POST",
             body: JSON.stringify({ slug, limit }),

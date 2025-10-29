@@ -74,17 +74,33 @@ def _normalize_quiz(raw: dict | list) -> dict:
 def start_quiz():
     payload = request.get_json(silent=True) or {}
     slug = (payload.get("slug") or "").strip()
-    if not slug:
-        return jsonify({"error": "missing slug"}), 400
-
-    limit = int(payload.get("limit", QUESTION_LIMIT_DEFAULT))
+    try:
+        limit = int(payload.get("limit", 10))
+    except (TypeError, ValueError):
+        limit = 10
+    # sanity bounds
     limit = max(1, min(limit, 50))
+
     q = _load_quiz(slug)
-    sanitized = _sanitize_for_client(q)
+    pool = list(q["questions"])
+    random.shuffle(pool)
+    selected = pool[:min(limit, len(pool))]
 
+    sanitized = {
+        "slug": q["slug"],
+        "title": q["title"],
+        "questions": [
+            {
+                "id": it["id"],
+                "text": it["text"],
+                #shuffle around options.
+                "options": random.sample(
+                    [{"id": o["id"], "text": o["text"]} for o in it["options"]],
+                    k=len(it["options"])),} for it in selected],}
 
-    answers = {it["id"]: it["answer"] for it in q["questions"]}
-    explanations = {it["id"]: it.get("explanation") for it in q["questions"]}
+    # only store answers/explanations for the selected subset
+    answers = {it["id"]: it["answer"] for it in selected}
+    explanations = {it["id"]: it.get("explanation") for it in selected}
 
     attempt_id = f"{current_user.id}:{slug}:{int(time.time())}"
     _attempts[attempt_id] = {
@@ -92,7 +108,7 @@ def start_quiz():
         "slug": slug,
         "answers": answers,
         "explanations": explanations,
-        "answers_user": {},     # question_id -> chosen option id
+        "answers_user": {},
         "submitted": False,
         "xp_on_pass": int(q.get("xp_on_pass", 0)),
         "pass_threshold": int(q.get("pass_threshold", 70)),
@@ -102,7 +118,7 @@ def start_quiz():
 @quiz_bp.post("/answer")
 @login_required
 def grade_one():
-    """Check a single answer; if correct, grant +5% O₂ on the server."""
+    """Check a single answer; if correct, grant +5% O2 on the server."""
     payload = request.get_json(silent=True) or {}
     attempt_id = payload.get("attempt_id")
     qid = payload.get("question_id")
@@ -117,7 +133,7 @@ def grade_one():
     correct = att["answers"].get(qid) == ans
     att["answers_user"][qid] = ans
 
-    # Server-side oxygen gains 2% if correct
+    # server-side oxygen gains 2% if correct
     if correct:
         from backend.blueprint.user_items.routes import apply_oxygen_gain_for_user
         apply_oxygen_gain_for_user(current_user.id, 2)  # applies caps/rollover rules, hopefully
