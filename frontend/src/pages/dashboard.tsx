@@ -154,6 +154,7 @@ export function Dashboard() {
                                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#C92337] disabled:hover:to-[#E16237]`}>
                                 <BookOpen className="w-5 h-5" />
                                 <span>Start Quiz</span>
+
                             </Button>
                             {/*div container for user_stat canister*/}
                             <div className="flex items-center space-x-3 bg-[#2F4B7A]/30 border border-[#F2F2F2] rounded-lg px-4 py-3 backdrop-blur-sm">

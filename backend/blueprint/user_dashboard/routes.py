@@ -32,7 +32,7 @@ def touch_login_streak():
 
 @stats_bp.post("/stats/earn_xp")
 @login_required
-def earn_xp():
+def earn_xp_route():
     data = request.get_json(force=True) or {}
     try:
         amount = int(data.get("amount", 0))
@@ -45,6 +45,25 @@ def earn_xp():
     s.earn_xp(amount)
     db.session.commit()
     return jsonify({"stats": s.to_dict()}), 200
+
+def award_xp_for_user(user_id: int, amount: int) -> UserStats:
+    """Grant XP to a user. No commit here. Safe to call from other server code."""
+    if amount <= 0:
+        raise ValueError("amount must be > 0")
+
+    # Lock the row to avoid race conditions (two concurrent awards)
+    s = db.session.execute(
+        select(UserStats).where(UserStats.user_id == user_id).with_for_update()
+    ).scalar_one_or_none()
+
+    if not s:
+        s = UserStats(user_id=user_id)
+        db.session.add(s)
+        db.session.flush()  # ensure row exists before s.earn_xp()
+
+    s.earn_xp(amount)  # your leveling logic already lives here
+    return s
+
 
 @stats_bp.get("/leaderboard")
 @login_required
