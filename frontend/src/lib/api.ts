@@ -118,3 +118,37 @@ export const ItemsApi = {
             method: "POST",
         }),
 }
+
+//For QUIZ shite
+
+export type QuizOption = { id: string; text: string }
+export type QuizQuestionClient = { id: string; text: string; options: QuizOption[] }
+export type QuizStartResp = {
+    attempt_id: string
+    quiz: { slug: string; title: string; questions: QuizQuestionClient[] }
+}
+
+export type AnswerResult = {
+    correct: boolean
+    correct_option_id: string
+    your_answer_id: string
+    explanation?: string | null
+}
+
+export const QuizApi = {
+    start: (slug: string, limit: 10) =>
+        api<QuizStartResp>("/api/quiz/start", {
+            method: "POST",
+            body: JSON.stringify({ slug, limit }),
+        }),
+    answer: (attemptId: string, questionId: string, answer: string) =>
+        api<AnswerResult>("/api/quiz/answer", {
+            method: "POST",
+            body: JSON.stringify({ attempt_id: attemptId, question_id: questionId, answer }),
+        }),
+    submit: (attempt_id: string, answers: Record<string, string>) =>
+        api<{ ok: true; score_pct: number; earned: number; stats?: UserStats }>("/api/quiz/submit", {
+            method: "POST",
+            body: JSON.stringify({ attempt_id, answers }),
+        }),
+}

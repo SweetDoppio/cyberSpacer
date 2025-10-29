@@ -236,3 +236,10 @@
     width: 3px;
     height: 3px;
 }
+
+.results_response{
+    color: white;
+    font-size: large;
+    font-weight: bold;
+    margin: 10em;
+}

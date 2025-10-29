@@ -46,6 +46,10 @@ def create_app():
     from backend.blueprint.user_items import user_items_bp
     app.register_blueprint(user_items_bp, url_prefix="/api/user_items")
 
+    from backend.blueprint.quiz import quiz_bp
+    app.register_blueprint(quiz_bp, url_prefix="/api/quiz")
+
+
     return app
 
 @login_manager.user_loader
