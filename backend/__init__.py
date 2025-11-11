@@ -49,6 +49,8 @@ def create_app():
     from backend.blueprint.quiz import quiz_bp
     app.register_blueprint(quiz_bp, url_prefix="/api/quiz")
 
+    from backend.blueprint.scanner import scanner_bp
+    app.register_blueprint(scanner_bp)
 
     return app
 

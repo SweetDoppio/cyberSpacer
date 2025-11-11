@@ -31,7 +31,6 @@ export function Header({
                        }: HeaderProps) {
     const { user, logout } = useAuth()
 
-    // Support either snake_case or camelCase from your backend
     const displayName = (user as any)?.first_name ?? (user as any)?.firstName ?? null
 
     const renderNavItem = (item: NavItem, idx: number) => {
@@ -75,8 +74,11 @@ export function Header({
                     {/* Auth-aware section */}
                     {displayName ? (
                         <div className="flex items-center gap-3">
+                            <NavLink to="/scanner" className={baseLink}>
+                                Scanner
+                            </NavLink>
                             <NavLink to="/dashboard" className="text-black">
-                                Hi, <b>{displayName}</b>
+                                -- Hi, <b>{displayName}</b> --
                             </NavLink>
                             <Button
                                 variant="outline"
@@ -85,6 +87,8 @@ export function Header({
                             >
                                 Log out
                             </Button>
+
+
                         </div>
                     ) : (
                         showSignIn && (
