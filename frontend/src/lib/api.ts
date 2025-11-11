@@ -51,6 +51,47 @@ export const AuthApi = {
 
 }
 
+//hook for scanner
+export type HttpsResult = {
+    url: string;
+    is_https: boolean;
+    redirects_to_https: boolean;
+    security_issues: string[];
+};
+
+export type XssResult = {
+    url: string;
+    form_count: number;
+    vulnerable_forms: { action: string; method: string }[];
+};
+
+export type SqliResult = {
+    url: string;
+    param_count: number;
+    vulnerable_params: { name: string; payload: string }[];
+};
+
+export type ScanResult = {
+    url: string;
+    checks: {
+        https?: HttpsResult;
+        xss?: XssResult;
+        sqli?: SqliResult;
+    };
+    errors: string[];
+    duration_ms: number;
+};
+
+export type ScanCheck = "https" | "xss" | "sqli";
+
+export const ScannerApi = {
+    scan: (url: string, checks?: ScanCheck[]) =>
+        api<ScanResult>("/api/scan", {
+            method: "POST",
+            body: JSON.stringify({ url, checks }),
+        }),
+};
+
 export type UserStats = {
     days_logged_in: number
     last_login_date: string | null

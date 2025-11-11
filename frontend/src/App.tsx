@@ -3,6 +3,7 @@ import CybernautsLanding from "@/pages/cyberNaut"
 import {AuthPage} from "@/app/auth/login/page"      // <-- the login PAGE component
 import PricingPage from "@/app/pricing/page"
 import QuizPage from "@/pages/quiz";
+import ScannerIHardlyKnowHer from "@/pages/scanner";
 import {Dashboard} from "@/pages/dashboard"
 import { useAuth } from "@/lib/auth-context";
 import type {JSX} from "react"
@@ -26,6 +27,7 @@ export default function App() {
                     <Dashboard />
                 </RequireAuth>
             } />
+            <Route path="/scanner" element={<ScannerIHardlyKnowHer />}/>
             <Route path="/quiz" element={<RequireAuth><QuizPage/></RequireAuth>}/>
             <Route path="*" element={<div className="p-8 text-white">404</div>} />
         </Routes>

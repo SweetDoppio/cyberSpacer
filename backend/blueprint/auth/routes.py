@@ -22,6 +22,7 @@ def get_all_users():
     return jsonify([user.get_user_credentials_dict() for user in users]), 200
 
 
+#unique error codes for better db error handling
 PG_UNIQUE     = "23505"
 PG_NOT_NULL   = "23502"
 PG_CHECK_FAIL = "23514"
@@ -29,12 +30,12 @@ PG_FK_VIOL    = "23503"
 
 @auth_bp.route("/register", methods=["POST"])
 def register_user():
-    register_data = request.get_json(force=True) or {}
-    first = (register_data.get("first_name")or "").strip()
-    last = (register_data.get("last_name") or "").strip()
-    email = (register_data.get("email") or "").strip().lower()
-    age = (register_data.get("age") or "")
-    pwd   = register_data.get("password") or ""
+    reg_data = request.get_json(force=True) or {}
+    first = (reg_data.get("first_name")or "").strip()
+    last = (reg_data.get("last_name") or "").strip()
+    email = (reg_data.get("email") or "").strip().lower()
+    age = (reg_data.get("age") or "")
+    pwd   = reg_data.get("password") or ""
 
     if not (first and last and email and pwd and age):
         return jsonify({"error": "missing fields"}), 400
