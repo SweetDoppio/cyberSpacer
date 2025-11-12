@@ -296,6 +296,13 @@ export default function ScannerPage() {
                                                     <div>
                                                         <p className="text-[#E16237] font-semibold">✅ Secure — Uses HTTPS</p>
                                                         <p className="text-gray-300 text-sm mt-1">URL is properly secured with HTTPS protocol</p>
+                                                        <p className=" text-white"> <span className="mt-0.5 text-[1.5rem] text-white font-bold">What does this mean?</span><br/>
+                                                            This means your browser and the website are talking over a locked, private line. Everything you type
+                                                            (like passwords or card details) is scrambled into
+                                                            secret code while it travels, so people on the same Wi-Fi can’t
+                                                            easily read or change it. You can spot it by the lock icon and the
+                                                            address starting with https://. It keeps your info safe on the way, but it doesn’t prove the site itself is
+                                                            honest—so still check the website’s name and only share details with sites you trust!</p>
                                                     </div>
                                                 </div>
                                             ) : httpsRes.redirects_to_https ? (
@@ -319,6 +326,8 @@ export default function ScannerPage() {
                                                     <div>
                                                         <p className="text-[#C92337] font-semibold">⚠️ No HTTPS Configured</p>
                                                         <p className="text-gray-300 text-sm mt-1">Website is not using HTTPS encryption</p>
+                                                        <p className="text-white">Not every pee-pee time is poop-poo time, but every poo-poo time is
+                                                            pee-pee time</p>
                                                     </div>
                                                 </div>
                                             )
@@ -343,8 +352,12 @@ export default function ScannerPage() {
                                             <div className="flex items-start gap-3 bg-[#2F4B7A]/20 rounded-lg p-4 border border-[#E16237]/30">
                                                 <CheckCircle2 className="w-5 h-5 text-[#E16237] mt-0.5 flex-shrink-0" />
                                                 <div>
-                                                    <p className="text-[#E16237] font-semibold">✅ No Vulnerabilities Detected</p>
+                                                    <p className="text-[#E16237] font-semibold">✅ No SQL Vulnerabilities Detected</p>
                                                     <p className="text-gray-300 text-sm mt-1">Parameters tested: {sqliRes?.param_count ?? 0}</p>
+                                                    <p className=" text-white"> <span className="mt-0.5 text-[1.5rem] text-white font-bold">What does this mean?</span><br/>
+                                                        This means Forms and search boxes only accept your input as data, not as secret commands to the database.
+                                                        Attackers can’t use a text box to peek at other people’s information, change records, or wipe data.
+                                                        In short: the site’s data is much harder to steal or mess with through that trick.</p>
                                                 </div>
                                             </div>
                                         )}
@@ -366,8 +379,13 @@ export default function ScannerPage() {
                                             <div className="flex items-start gap-3 bg-[#2F4B7A]/20 rounded-lg p-4 border border-[#E16237]/30">
                                                 <CheckCircle2 className="w-5 h-5 text-[#E16237] mt-0.5 flex-shrink-0" />
                                                 <div>
-                                                    <p className="text-[#E16237] font-semibold">✅ No Vulnerabilities Detected</p>
+                                                    <p className="text-[#E16237] font-semibold">✅ No XSS Vulnerabilities Detected</p>
                                                     <p className="text-gray-300 text-sm mt-1">Forms tested: {xssRes?.form_count ?? 0}</p>
+                                                    <p className=" text-white"> <span className="mt-0.5 text-[1.5rem] text-white font-bold">What does this mean?</span><br/>
+                                                        Pages won’t run surprise code from strangers in your browser.
+                                                        That means attackers can’t easily steal your login, show fake pop-ups, or click things on your behalf
+                                                        just by getting you to view a page. What you see and do on the site stays what the site intended.</p>
+
                                                 </div>
                                             </div>
                                         )}

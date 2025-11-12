@@ -44,23 +44,23 @@ export function Dashboard() {
     }
 
     //Just havin g this for oxygen test. Remove later
-    const handleOxygenIncrease = async () => {
-        try {
-            const it = await ItemsApi.gain(10) // +10%
-            setItems(it)
-        } catch (e: any) {
-            setError(e?.message || "Failed to gain oxygen")
-        }
-    }
-
-    const handleLoseCanister = async () => {
-        try {
-            const it = await ItemsApi.use()
-            setItems(it)
-        } catch (e: any) {
-            setError(e?.message || "No canisters to use")
-        }
-    }
+    // const handleOxygenIncrease = async () => {
+    //     try {
+    //         const it = await ItemsApi.gain(10) // +10%
+    //         setItems(it)
+    //     } catch (e: any) {
+    //         setError(e?.message || "Failed to gain oxygen")
+    //     }
+    // }
+    //
+    // const handleLoseCanister = async () => {
+    //     try {
+    //         const it = await ItemsApi.use()
+    //         setItems(it)
+    //     } catch (e: any) {
+    //         setError(e?.message || "No canisters to use")
+    //     }
+    // }
 
 
     useEffect(() => {
@@ -205,16 +205,16 @@ export function Dashboard() {
 
                                     {/*testing button div*/}
                                     <div className="mt-4">
-                                        <Button
-                                            variant="outline"
-                                            className="border-[#4A668E]/50 text-white"
-                                            onClick={async () => {
-                                                const { stats: s } = await StatsApi.earnXP(50)
-                                                setStats(s)
-                                            }}
-                                        >
-                                            For testing, so remember to remove it..+50 XP
-                                        </Button>
+                                        {/*<Button*/}
+                                        {/*    variant="outline"*/}
+                                        {/*    className="border-[#4A668E]/50 text-white"*/}
+                                        {/*    onClick={async () => {*/}
+                                        {/*        const { stats: s } = await StatsApi.earnXP(50)*/}
+                                        {/*        setStats(s)*/}
+                                        {/*    }}*/}
+                                        {/*>*/}
+                                        {/*    For testing, so remember to remove it..+50 XP*/}
+                                        {/*</Button>*/}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -326,20 +326,20 @@ export function Dashboard() {
 
                                     {/*TEST BUTTONS!!!  REMOVE LATER!!!!!!!!!*/}
                                     <div className="flex flex-col space-y-2 mt-4">
-                                        <Button
-                                            onClick={handleOxygenIncrease}
-                                            className="bg-[#4A668E] hover:bg-[#DBA64A] text-white text-xs py-1"
-                                            disabled={!items}
-                                        >
-                                            +10%
-                                        </Button>
-                                        <Button
-                                            onClick={handleLoseCanister}
-                                            className="bg-[#C92337] hover:bg-[#E16237] text-white text-xs py-1"
-                                            disabled={!items || (items?.oxygen_cannisters ?? 0) === 0}
-                                        >
-                                            -Canister
-                                        </Button>
+                                        {/*<Button*/}
+                                        {/*    onClick={handleOxygenIncrease}*/}
+                                        {/*    className="bg-[#4A668E] hover:bg-[#DBA64A] text-white text-xs py-1"*/}
+                                        {/*    disabled={!items}*/}
+                                        {/*>*/}
+                                        {/*    +10%*/}
+                                        {/*</Button>*/}
+                                        {/*<Button*/}
+                                        {/*    onClick={handleLoseCanister}*/}
+                                        {/*    className="bg-[#C92337] hover:bg-[#E16237] text-white text-xs py-1"*/}
+                                        {/*    disabled={!items || (items?.oxygen_cannisters ?? 0) === 0}*/}
+                                        {/*>*/}
+                                        {/*    -Canister*/}
+                                        {/*</Button>*/}
                                     </div>
                                 </CardContent>
                             </Card>
