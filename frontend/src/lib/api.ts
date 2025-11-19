@@ -124,7 +124,7 @@ export type UserStats = {
 
 // hook for handling user stats
 export const StatsApi = {
-    touch: () => api<{ stats: UserStats }>("/api/user_dashboard/stats/touch", { method: "POST" }),
+    touchMeHarder: () => api<{ stats: UserStats }>("/api/user_dashboard/stats/touch", { method: "POST" }),
     get: () => api<{ stats: UserStats }>("/api/user_dashboard/stats"),
 
     earnXP: (amount: number) =>

@@ -116,7 +116,7 @@ export function Dashboard() {
                 if (!user) { navigate("/auth/login"); return }
 
                 const [touchRes, lb, it] = await Promise.all([
-                    StatsApi.touch(),
+                    StatsApi.touchMeHarder(),
                     LeaderboardApi.list(5, 0),  // { entries, me }
                     ItemsApi.items(),              // items
                 ])
