@@ -7,10 +7,6 @@ scanner_bp = Blueprint("scanner", __name__, url_prefix="/api")
 
 @scanner_bp.route("/scan", methods=["POST"])
 def scan():
-    """
-    JSON body:
-      { "url": "https://example.com", "checks": ["https","xss","sqli"] }
-    """
     data = request.get_json(silent=True) or {}
     url = (data.get("url") or "").strip()
     checks = data.get("checks") or ["https", "xss", "sqli"]

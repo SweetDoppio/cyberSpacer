@@ -81,27 +81,10 @@ def register_user():
         db.session.commit()
         return jsonify({"Success": "User has been successfully registered"}), 200
 
-    except IntegrityError as e:
+    except IntegrityError:
         db.session.rollback()
-        orig = getattr(e, "orig", None)
-        code = getattr(orig, "pgcode", None)
-        cname = getattr(getattr(orig, "diag", None), "constraint_name", None)
+
         # Log to server console for fast diagnosis
-        print("REGISTER IntegrityError:", code, cname, str(orig))
-
-        if code == PG_UNIQUE:
-            # e.g. users_email_key or uq_users_email_ci
-            return jsonify({"error": "email already in use", "constraint": cname}), 409
-        if code == PG_NOT_NULL:
-            return jsonify({"error": "missing required fields", "constraint": cname}), 400
-        if code == PG_CHECK_FAIL:
-            return jsonify({"error": "check constraint failed", "constraint": cname}), 400
-        if code == PG_FK_VIOL:
-            return jsonify({"error": "foreign key violation", "constraint": cname}), 400
-        return jsonify({"error": "integrity error", "code": code, "constraint": cname}), 400
-
-
-
 @auth_bp.post("/login")
 def login():
     data = request.get_json(force=True) or {}

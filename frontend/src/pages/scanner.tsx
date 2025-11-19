@@ -149,11 +149,11 @@ export default function ScannerPage() {
 
             <Header />
 
-            <main className="relative z-10 w-full h-screen flex flex-col items-center justify-center px-6">
+            <main className="relative z-10 w-full h-screen  mt-20 flex flex-col items-center justify-center px-6">
                 {!result ? (
                     <>
                         {/* Header */}
-                        <div className="mb-12 text-center">
+                        <div className="mb-10 text-center mt-10">
                             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 text-balance">
                                 Website Security
                                 <span className="bg-gradient-to-r from-[#C92337] via-[#E16237] to-[#DBA64A] bg-clip-text text-transparent">
@@ -161,7 +161,7 @@ export default function ScannerPage() {
                                     Scanner
                                     </span>
                             </h1>
-                            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                            <p className="text-lg text-gray-300 max-w-2xl  mt-4">
                                 Scan websites for critical vulnerabilities including HTTPS security, XSS attacks, and SQL injection
                                 threats.
                             </p>

@@ -1,12 +1,14 @@
 "use client"
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:5000"
 
-import { useEffect, useState } from "react"
+import {type ChangeEvent, useEffect, useState} from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/ui/header"
 import { ParallaxStarsbackground } from "@/components/ui/night_sky"
 import {  Flame, BookOpen, Milk } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import {UserAvatar} from "@/lib/api";
 import { StatsApi, type UserStats, type LeaderboardEntry, LeaderboardApi,ItemsApi, type Items } from "@/lib/api"
 import { useNavigate } from "react-router-dom"
 import {ILoveSmellingFeet} from "@/components/ui/footer";
@@ -22,6 +24,50 @@ export function Dashboard() {
     const [error, setError] = useState<string | null>(null)
     const [myRank, setMyRank] = useState<number | null>(null)
     const [items, setItems] = useState<Items | null>(null)
+
+    const [avatarUploading, setAvatarUploading] = useState(false)
+    const [avatarError, setAvatarError] = useState<string | null>(null)
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(
+        (user as any)?.avatar_url ?? null
+    )
+
+
+    useEffect(() => {
+        setAvatarUrl((user as any)?.avatar_url ?? null)
+    }, [user])
+
+
+    const avatarSrc =
+        avatarUrl
+            ? (avatarUrl.startsWith("http")
+                ? avatarUrl
+                : `${API_BASE_URL}${avatarUrl}`)
+            : null
+
+    const handleAvatarChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        if (file.size > 2 * 1024 * 1024) { // 2MB
+            setAvatarError("File too big (max 2MB).")
+            return
+        }
+
+        setAvatarError(null)
+        setAvatarUploading(true)
+        try {
+            const { avatar_url } = await UserAvatar.uploadAvatar(file)
+            // backend should return something like "/static/avatars/xyz.png"
+            setAvatarUrl(avatar_url)
+        } catch (err: any) {
+            console.error(err)
+            setAvatarError(err?.message || "Failed to upload avatar")
+        } finally {
+            setAvatarUploading(false)
+        }
+    }
+
+
 
     // displays logged in first_namee
     const displayName =
@@ -140,10 +186,38 @@ export function Dashboard() {
                     {/* Welcome Section */}
                     <div className="mb-2 flex items-center justify-between">
                         <div>
+                            <div className="flex flex-col justify-center items-center gap-2">
+                                {avatarSrc ? (
+                                    <img
+                                        src={avatarSrc}
+                                        alt="Profile avatar"
+                                        className="w-30 h-30 rounded-full object-cover border border-[#DBA64A]/70"
+                                    />
+                                ) : (
+                                    <div className="w-16 h-16 rounded-full bg-[#223150] border border-[#4A668E]/60 flex items-center justify-center text-2xl font-bold text-white">
+                                        {(user?.first_name?.[0] ?? "C").toUpperCase()}
+                                    </div>
+                                )}
+
+                                {/* Change button for avatar pics */}
+                                <label className="bg-black/80 text-[10px] text-gray-100 px-2 py-1 rounded-full cursor-pointer border border-[#4A668E]/70 hover:bg-[#4A668E]/80">
+                                    {avatarUploading ? "..." : "Change"}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        className="hidden"
+                                        disabled={avatarUploading}
+                                    />
+                                </label>
+                            </div>
                             <h1 className="text-4xl font-bold text-white mb-2">
                                 Welcome back, <span className="text-[#DBA64A]">{displayName}</span>!
                             </h1>
                             <p className="text-gray-300">Keep pushing your cybersecurity journey forward</p>
+                            {avatarError && (
+                                <p className="text-xs text-red-400 mt-1">{avatarError}</p>
+                            )}
                         </div>
 
                         {/* Canisters div  */}
@@ -153,7 +227,7 @@ export function Dashboard() {
                                         hover:from-[#E16237] hover:to-[#DBA64A]
                                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#C92337] disabled:hover:to-[#E16237]`}>
                                 <BookOpen className="w-5 h-5" />
-                                <span>Start Quiz</span>
+                                { isO2Maxed ? <span>Canisters are full!</span> : <span>Start Quiz?</span> }
 
                             </Button>
                             {/*div container for user_stat canister*/}

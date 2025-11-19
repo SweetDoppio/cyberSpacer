@@ -25,8 +25,9 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime(timezone=True), nullable=False, server_default=db.func.now() )
     email: Mapped[str] = mapped_column(String(100), index=True, nullable=False, unique=True)
     password_hash: Mapped[str] = mapped_column(String(256), index=False, nullable=False)
+    avatar_url = db.Column(db.String(255), nullable=True)
 
-    # onne to one relational orm
+# onne to one relational orm
     stats: Mapped["UserStats"] = relationship(back_populates="user", uselist=False, cascade="all, delete-orphan")
     items: Mapped["UserItems"] = relationship(back_populates="user",uselist=False, cascade="all ,delete-orphan")
 
@@ -58,6 +59,7 @@ class User(db.Model, UserMixin):
             "first_name" : self.first_name,
             "age" : self.age,
             "email" : self.email,
+            "avatar_url" : self.avatar_url
         }
 
     def get_user_credentials_dict(self) -> dict:

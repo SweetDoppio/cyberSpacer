@@ -4,12 +4,12 @@ python -m flask --app backend:create_app shell
 from backend.blueprint.models import User, UserStats
 from backend import db
 
-u = User.query.filter_by(email="rina@gmail.com").first()  # or .get(1)
+u = User.query.filter_by(email="brandon.cho@example.com").first()  # or .get(1)
 s = u.stats
 if s is None:
     s = UserStats(); u.stats = s; db.session.add(s)
 
-s.total_xp = 69
+s.total_xp = 27
 s.recompute_level_fields()
 db.session.commit()
 
@@ -27,12 +27,17 @@ ORDER BY 1;
 #For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
 
 
+;For PC host Address -CHANGE TO  THIS
+;DATABASE_URL=postgresql+psycopg://myuser:cybernaut@127.0.0.1:5432/mydb
+
+
 
 from backend.extensions import db
 from backend.blueprint.models.user import User
 from backend.blueprint.models.stats import UserStats
 
-u = db.session.execute(db.select(User).where(User.email=='moisty123@gmail.com')).scalar_one()
+u = db.session.execute(db.select(User).where(User.email=='samsung@gmail.com')).scalar_one()
 s = db.session.execute(db.select(UserStats).where(UserStats.user_id==u.id)).scalar_one()
-s.days_logged_in +=22
+s.xp_to_next += 903
+s.xp_in_level +=903
 db.session.commit()

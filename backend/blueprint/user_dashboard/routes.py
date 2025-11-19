@@ -51,7 +51,6 @@ def award_xp_for_user(user_id: int, amount: int) -> UserStats:
     if amount <= 0:
         raise ValueError("amount must be > 0")
 
-    # Lock the row to avoid race conditions (two concurrent awards)
     s = db.session.execute(
         select(UserStats).where(UserStats.user_id == user_id).with_for_update()
     ).scalar_one_or_none()
@@ -59,9 +58,9 @@ def award_xp_for_user(user_id: int, amount: int) -> UserStats:
     if not s:
         s = UserStats(user_id=user_id)
         db.session.add(s)
-        db.session.flush()  # ensure row exists before s.earn_xp()
+        db.session.flush()
 
-    s.earn_xp(amount)  # your leveling logic already lives here
+    s.earn_xp(amount)
     return s
 
 
@@ -127,3 +126,6 @@ def leaderboard():
             "current_level": me_stats.current_level,
         },
     }), 200
+
+
+
