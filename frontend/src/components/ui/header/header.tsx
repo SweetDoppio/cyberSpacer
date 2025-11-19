@@ -95,9 +95,8 @@ export function Header({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="border-black text-black hover:text-red-500"
-                            >
-                                <Link to={signInTo}>Sign in</Link>
+                                className="border-black text-black hover:text-red-500">
+                                <Link to={signInTo}>Sign in / Register</Link>
                             </Button>
                         )
                     )}

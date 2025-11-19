@@ -22,6 +22,7 @@ class Badge(db.Model):
     id:   Mapped[int]  = mapped_column(primary_key=True, autoincrement=True)
     slug: Mapped[str]  = mapped_column(String(64), unique=True, index=True, nullable=False)  # e.g. "network-master"
     name: Mapped[str]  = mapped_column(String(100), nullable=False)
+    # icon_path: Mapped[str | None] = mapped_column(String(200))
     description: Mapped[str] = mapped_column(Text, default="", nullable=False)
 
     users: Mapped[list["User"]] = relationship(

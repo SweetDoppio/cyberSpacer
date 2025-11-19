@@ -163,7 +163,7 @@ def submit_quiz():
     score_pct = int(round((correct / max(1, total)) * 100))
 
     # award xp only if user has passed the quiz
-    earned = 0
+    earned = 15
     stats_dict = None
     if score_pct >= att["pass_threshold"]:
         from backend.blueprint.user_dashboard.routes import award_xp_for_user

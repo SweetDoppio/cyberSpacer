@@ -97,7 +97,6 @@ class UserStats(db.Model):
         self.xp_to_next = max(1, to_next)
 
     def earn_xp(self, amount: int) -> None:
-        """Award XP and update derived fields."""
         if amount <= 0:
             return
         self.total_xp += amount

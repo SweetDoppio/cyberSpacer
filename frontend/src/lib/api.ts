@@ -1,5 +1,6 @@
 // src/lib/api.ts
-export type PublicUser = { id: number; first_name: string; last_name: string; email: string }
+
+export type PublicUser = { id: number; first_name: string; last_name: string; email: string, avatar_url?: string | null }
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     const res = await fetch(path, {
@@ -7,7 +8,6 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
         headers: { "Content-Type": "application/json", ...(init.headers || {}) },
         ...init,
     })
-
 
     const text = await res.text()
     let data: any = null
@@ -19,6 +19,25 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     }
     return data as T
 }
+
+export const UserAvatar = {
+    uploadAvatar: async (file: File): Promise<{ avatar_url: string }> => {
+        const formData = new FormData()
+        formData.append("avatar", file)
+
+        const res = await fetch("/api/user_profile/avatar", {
+            method: "POST",
+            body: formData,
+            credentials: "include",
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            throw new Error(data?.error || "Failed to upload avatar")
+        }
+        return data
+    },
+}
+
 
 //hook for handling authentication
 export const AuthApi = {

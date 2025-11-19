@@ -174,7 +174,7 @@ export default function QuizPage() {
                             <h2 className="text-4xl font-bold text-white mb-2">Quiz Complete!</h2>
                             <p className="text-gray-300 mb-8">Accuracy: <b className="text-[#E16237]">{accuracy}%</b></p>
                             {/*Clear up this bit better later...*/}
-                            {accuracy >= 90 ? <span className={"results_response"}>Wow, You're a real Cybernaut!</span> : accuracy < 89 && accuracy >= 60 ? <span className={"results_response"}> Not bad...
+                            {accuracy >= 90 ? <span className={"results_response"}>Wow, You're a real Cybernaut!</span> : accuracy < 89 && accuracy >= 60 ? <span className={"results_response"}> Hey, that's pretty gof
                                 </span> : accuracy <=59  && accuracy > 30 ? <span className={"results_response"}> Well, could be a lot worse...</span> : <span className={"results_response"}> You're on your way to get ejected out of the ship...</span>}
 
                             <div className="flex gap-4">

@@ -1,3 +1,1 @@
-
-
-__all__ = []
+from .routes import user_profile_bp
