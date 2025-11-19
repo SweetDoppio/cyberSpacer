@@ -8,7 +8,7 @@ import { Header } from "@/components/ui/header"
 import {ParallaxStarsbackground} from "@/components/ui/night_sky";
 import {ILoveSmellingFeet} from "@/components/ui/footer";
 
-import {QuizApi, type QuizQuestionClient} from "@/lib/api";
+import {QuizApi,StatsApi, type QuizQuestionClient} from "@/lib/api";
 
 
 
@@ -30,6 +30,7 @@ export default function QuizPage() {
             try {
                 const { attempt_id, quiz } = await QuizApi.start("QuizMe", 10)
                 setAttemptId(attempt_id)
+                await StatsApi.touchMeHarder()
                 setQuestions(quiz.questions)
             } catch (e: any) {
                 setError(e?.message || "Failed to load quiz")
@@ -57,7 +58,9 @@ export default function QuizPage() {
         setIsAnswered(true);
         setAnswers(prev => ({ ...prev, [q.id]: optionId }));
         const res = await QuizApi.answer(attemptId, q.id, optionId);
-        if (res.correct) setCorrectCount(c => c + 1);
+        if (res.correct) {setCorrectCount(c => c + 1);
+            await StatsApi.earnXP(5)}
+
         setCorrectId(res.correct_option_id || null);
         setExplanation(res.explanation || null);
     }
