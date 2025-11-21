@@ -4,6 +4,8 @@ from sqlalchemy.orm import load_only
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from backend.extensions import db
 from flask_login import login_user, current_user, logout_user, login_required
+from backend.badges.engine import evaluate_badges_for_user
+
 
 CONTACT_LIST_URL = "/contactList"
 
@@ -92,15 +94,25 @@ def login():
     pwd   = data.get("password") or ""
     user = db.session.query(User).filter_by(email=email).first()
 
-
     if not user or not user.verify_password(pwd):
         return jsonify({"Login Error": "invalid credentials"}), 401
-    login_user(user)  # sets session cookie
     if not user.stats:
         user.stats = UserStats()
-    UserStats.apply_login_streak(user.stats)
+
+    # Update login streak
+    user.stats.apply_login_streak()
     db.session.commit()
-    return jsonify({"user": user.get_user_credentials_dict_public()}), 200
+
+    new_badges = evaluate_badges_for_user(user)
+
+    login_user(user)
+
+    return jsonify({
+        "user": user.get_user_credentials_dict_public(),
+        "stats": user.stats.to_dict(),
+        "badges": [b.to_dict() for b in user.badges],
+        "new_badges": [b.to_dict() for b in new_badges],
+    }), 200
 
 
 @auth_bp.post("/logout")

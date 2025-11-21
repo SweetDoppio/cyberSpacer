@@ -59,7 +59,7 @@ export default function QuizPage() {
         setAnswers(prev => ({ ...prev, [q.id]: optionId }));
         const res = await QuizApi.answer(attemptId, q.id, optionId);
         if (res.correct) {setCorrectCount(c => c + 1);
-            await StatsApi.earnXP(5)}
+            await StatsApi.earnXP(100)}
 
         setCorrectId(res.correct_option_id || null);
         setExplanation(res.explanation || null);

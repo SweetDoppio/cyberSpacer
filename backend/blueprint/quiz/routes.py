@@ -136,7 +136,7 @@ def grade_one():
     # server-side oxygen gains 2% if correct
     if correct:
         from backend.blueprint.user_items.routes import apply_oxygen_gain_for_user
-        apply_oxygen_gain_for_user(current_user.id, 2)  # applies caps/rollover rules, hopefully
+        apply_oxygen_gain_for_user(current_user.id, 5)  # applies caps/rollover rules, hopefully
         db.session.commit()
 
     return jsonify({

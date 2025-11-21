@@ -1,14 +1,14 @@
 from flask import Flask,jsonify
 from flask_cors import CORS
 import os
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 from backend.extensions import db, migrate
 from flask_login import LoginManager
 
 
 login_manager = LoginManager()
-load_dotenv(find_dotenv()) #Place this in create_app when running on my PC
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env"))
 
 def create_app():
     print("DATABASE_URL =", os.getenv("DATABASE_URL"))
@@ -20,7 +20,11 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
     app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 2 MB max upload
+    #for user profile pics
     app.config["AVATAR_UPLOAD_FOLDER"] = os.path.join(basedir, "static", "avatars")
+    #For badges
+    app.config["BADGE_ICON_FOLDER"] = os.path.join(basedir, "static", "badges")
+
     os.makedirs(app.config["AVATAR_UPLOAD_FOLDER"], exist_ok=True)
 
     db.init_app(app)
@@ -30,11 +34,11 @@ def create_app():
     @app.cli.command("init-db")
     def init_db():
         """Initialize the database (create all tables)."""
-        db.drop_all()
-        db.create_all()
         with app.app_context():
-            db.flush()
+            db.drop_all()
+            db.create_all()
             print("All tables created successfully in", db.engine.url)
+
 
     @login_manager.unauthorized_handler
     def _unauthorized():

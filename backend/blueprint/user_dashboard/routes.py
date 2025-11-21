@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
+
+from backend.badges.engine import evaluate_badges_for_user
 from backend.extensions import db
 from backend.blueprint.models import UserStats, User
 from sqlalchemy import select, func
@@ -27,8 +29,18 @@ def get_my_stats():
 def touch_login_streak():
     s = _ensure_stats()
     s.apply_login_streak()
+    db.session.flush()  # make sure updated stats are visible
+
+    # 🔥 award badges based on new stats
+    new_badges = evaluate_badges_for_user(current_user)
+
     db.session.commit()
-    return jsonify({"stats": s.to_dict()}), 200
+
+    return jsonify({
+        "stats": s.to_dict(),
+        "badges": [b.to_dict() for b in current_user.badges],
+        "new_badges": [b.to_dict() for b in new_badges],
+    }), 200
 
 @stats_bp.post("/stats/earn_xp")
 @login_required
@@ -43,8 +55,17 @@ def earn_xp_route():
 
     s = _ensure_stats()
     s.earn_xp(amount)
+    db.session.flush()
+
+    new_badges = evaluate_badges_for_user(current_user)
+
     db.session.commit()
-    return jsonify({"stats": s.to_dict()}), 200
+    return jsonify({
+        "stats": s.to_dict(),
+        "badges": [b.to_dict() for b in current_user.badges],
+        "new_badges": [b.to_dict() for b in new_badges],
+    }), 200
+
 
 def award_xp_for_user(user_id: int, amount: int) -> UserStats:
     """Grant XP to a user. No commit here. Safe to call from other server code."""

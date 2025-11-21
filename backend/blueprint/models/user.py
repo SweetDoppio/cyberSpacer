@@ -55,6 +55,15 @@ class User(db.Model, UserMixin):
         gofakk = cast(str, cast(object, self.password_hash))
         return check_password_hash(gofakk, password)
 
+    def has_badge(self, slug: str) -> bool:
+        return any(b.slug == slug for b in self.badges)
+
+    def award_badge(self, badge: "Badge") -> None:
+        # Tell the type checker “trust me, this is a str”
+        self_slug = cast(str, cast(object, badge.slug))
+        if not self.has_badge(self_slug):
+            self.badges.append(badge)
+
     def get_user_credentials_dict_public(self) -> dict:
         return {
             "id" : self.id,

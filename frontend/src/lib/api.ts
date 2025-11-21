@@ -42,10 +42,11 @@ export const UserAvatar = {
 //hook for handling authentication
 export const AuthApi = {
     login: (email: string, password: string) =>
-        api<{ user: PublicUser }>("/api/auth/login", {
+        api<LoginResponse>("/api/auth/login", {
             method: "POST",
             body: JSON.stringify({ email, password }),
         }),
+
 
     register: (first: string, last: string, email: string, age: number, password: string) =>
 
@@ -111,6 +112,14 @@ export const ScannerApi = {
         }),
 };
 
+export type LoginResponse = {
+    user: PublicUser;
+    stats: UserStats;
+    badges: Badge[];
+    new_badges: Badge[];
+};
+
+
 export type UserStats = {
     days_logged_in: number
     last_login_date: string | null
@@ -124,7 +133,7 @@ export type UserStats = {
 
 // hook for handling user stats
 export const StatsApi = {
-    touchMeHarder: () => api<{ stats: UserStats }>("/api/user_dashboard/stats/touch", { method: "POST" }),
+    touchMeHarder: () => api<{ stats: UserStats; badges: Badge[]; new_badges: Badge[] }>("/api/user_dashboard/stats/touch", { method: "POST" }),
     get: () => api<{ stats: UserStats }>("/api/user_dashboard/stats"),
 
     earnXP: (amount: number) =>
@@ -212,3 +221,11 @@ export const QuizApi = {
             body: JSON.stringify({ attempt_id, answers }),
         }),
 }
+
+
+export type Badge = {
+    slug: string;
+    name: string;
+    description: string;
+    icon: string | null;  // "/static/badges/level_5.png"
+};

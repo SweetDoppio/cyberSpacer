@@ -26,10 +26,18 @@ class Badge(db.Model):
     name: Mapped[str]  = mapped_column(String(100), nullable=False)
     # icon_path: Mapped[str | None] = mapped_column(String(200))
     description: Mapped[str] = mapped_column(Text, default="", nullable=False)
-
+    icon_filename: Mapped[str | None] = mapped_column(String(200), nullable=True)
     users: Mapped[list["User"]] = relationship(
         secondary="user_badges", back_populates="badges", lazy="selectin"
     )
+
+    def to_dict(self) -> dict:
+        return {
+            "slug": self.slug,
+            "name": self.name,
+            "description": self.description,
+            "icon": f"/static/badges/{self.icon_filename}" if self.icon_filename else None,
+        }
 
     def __repr__(self) -> str:  # pragma: no cover
         return f"<Badge {self.slug}>"

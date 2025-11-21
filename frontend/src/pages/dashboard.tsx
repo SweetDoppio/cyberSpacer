@@ -9,7 +9,15 @@ import { ParallaxStarsbackground } from "@/components/ui/night_sky"
 import {  Flame, BookOpen, Milk } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import {UserAvatar} from "@/lib/api";
-import { StatsApi, type UserStats, type LeaderboardEntry, LeaderboardApi,ItemsApi, type Items } from "@/lib/api"
+import {
+    StatsApi,
+    type UserStats,
+    type LeaderboardEntry,
+    LeaderboardApi,
+    ItemsApi,
+    type Items,
+    type Badge,
+} from "@/lib/api"
 import { useNavigate } from "react-router-dom"
 import {ILoveSmellingFeet} from "@/components/ui/footer";
 
@@ -24,7 +32,8 @@ export function Dashboard() {
     const [error, setError] = useState<string | null>(null)
     const [myRank, setMyRank] = useState<number | null>(null)
     const [items, setItems] = useState<Items | null>(null)
-
+    const [badges, setBadges] = useState<Badge[]>([])
+    const [earnedBadges, setEarnedBadges] = useState<Badge[]>([])
     const [avatarUploading, setAvatarUploading] = useState(false)
     const [avatarError, setAvatarError] = useState<string | null>(null)
     const [avatarUrl, setAvatarUrl] = useState<string | null>(
@@ -76,19 +85,6 @@ export function Dashboard() {
         user?.email?.split("@")[0] ??
         "Cybernaut"
 
-
-    // mock badge data
-    const userMock = {
-        badges: [
-            { name: "First Stepss", icon: "🚀", color: "#C92337" },
-            { name: "Network Master", icon: "🌐", color: "#E16237" },
-            { name: "Ethical Hacker", icon: "🔓", color: "#DBA64A" },
-            { name: "Threat Hunter", icon: "🎯", color: "#4A668E" },
-            { name: "Security Expert", icon: "🛡️", color: "#2F4B7A" },
-            { name: "Streak Champion", icon: "🔥", color: "#C92337" },
-        ],
-    }
-
     //Just havin g this for oxygen test. Remove later
     // const handleOxygenIncrease = async () => {
     //     try {
@@ -117,14 +113,19 @@ export function Dashboard() {
 
                 const [touchRes, lb, it] = await Promise.all([
                     StatsApi.touchMeHarder(),
-                    LeaderboardApi.list(5, 0),  // { entries, me }
-                    ItemsApi.items(),              // items
+                    LeaderboardApi.list(5, 0),
+                    ItemsApi.items(),
                 ])
                 if (!mounted) return
+
                 setStats(touchRes.stats)
+                setBadges(touchRes.badges ?? [])
+                setEarnedBadges(touchRes.new_badges ?? [])
+
                 setBoard(lb.entries)
                 setMyRank(lb.me.rank)
                 setItems(it)
+
             } catch (e: any) {
                 setError(e?.message || "Failed to load dashboard")
             } finally {
@@ -317,18 +318,33 @@ export function Dashboard() {
                                 <Card className="bg-[#2F4B7A]/30 border-[#4A668E]/50 backdrop-blur-sm">
                                     <CardContent className="p-6">
                                         <h3 className="text-xl font-semibold text-white mb-4">Achievements</h3>
-                                        <div className="grid grid-cols-3 gap-4">
-                                            {userMock.badges.map((badge, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex flex-col items-center justify-center p-4 rounded-lg border border-[#4A668E]/50 hover:bg-[#2F4B7A]/50 transition-all"
-                                                    style={{ borderColor: badge.color + "40" }}
-                                                >
-                                                    <div className="text-3xl mb-2">{badge.icon}</div>
-                                                    <p className="text-xs text-gray-300 text-center">{badge.name}</p>
-                                                </div>
-                                            ))}
-                                        </div>
+                                        {badges.length === 0 ? (
+                                            <p className="text-gray-400 text-sm">
+                                                No badges yet — complete quizzes and keep your streak going!
+                                            </p>
+                                        ) : (
+                                            <div className="grid grid-cols-3 gap-4">
+                                                {badges.map((badge) => (
+                                                    <div
+                                                        key={badge.slug}
+                                                        className="flex flex-col items-center justify-center p-4 rounded-lg border border-[#4A668E]/50 hover:bg-[#2F4B7A]/50 transition-all"
+                                                    >
+                                                        {badge.icon ? (
+                                                            <img
+                                                                src={badge.icon.startsWith("http") ? badge.icon : `${API_BASE_URL}${badge.icon}`}
+                                                                alt={badge.name}
+                                                                className="w-10 h-10 rounded-full mb-2 border border-[#DBA64A]/60 object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-10 h-10 rounded-full mb-2 bg-[#223150] border border-[#4A668E]/60 flex items-center justify-center text-sm text-white">
+                                                                {badge.name[0]?.toUpperCase()}
+                                                            </div>
+                                                        )}
+                                                        <p className="text-xs text-gray-300 text-center">{badge.name}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             </div>
@@ -400,20 +416,6 @@ export function Dashboard() {
 
                                     {/*TEST BUTTONS!!!  REMOVE LATER!!!!!!!!!*/}
                                     <div className="flex flex-col space-y-2 mt-4">
-                                        {/*<Button*/}
-                                        {/*    onClick={handleOxygenIncrease}*/}
-                                        {/*    className="bg-[#4A668E] hover:bg-[#DBA64A] text-white text-xs py-1"*/}
-                                        {/*    disabled={!items}*/}
-                                        {/*>*/}
-                                        {/*    +10%*/}
-                                        {/*</Button>*/}
-                                        {/*<Button*/}
-                                        {/*    onClick={handleLoseCanister}*/}
-                                        {/*    className="bg-[#C92337] hover:bg-[#E16237] text-white text-xs py-1"*/}
-                                        {/*    disabled={!items || (items?.oxygen_cannisters ?? 0) === 0}*/}
-                                        {/*>*/}
-                                        {/*    -Canister*/}
-                                        {/*</Button>*/}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -422,6 +424,47 @@ export function Dashboard() {
                 </div>
             </main>
             <ILoveSmellingFeet/>
-    </div>
+            {earnedBadges.length > 0 && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                    <div className="bg-[#111827] border border-[#C92337] rounded-2xl p-6 max-w-md w-full text-white shadow-2xl">
+                        <h2 className="text-2xl font-bold mb-4 text-[#F97373]">
+                            New badge{earnedBadges.length > 1 ? "s" : ""} unlocked! 🎉
+                        </h2>
+
+                        <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {earnedBadges.map((badge) => (
+                                <div key={badge.slug} className="flex items-center gap-3">
+                                    {badge.icon ? (
+                                        <img
+                                            src={badge.icon.startsWith("http") ? badge.icon : `${API_BASE_URL}${badge.icon}`}
+                                            alt={badge.name}
+                                            className="w-10 h-10 rounded-full border border-[#DBA64A]/70 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-[#223150] border border-[#4A668E]/60 flex items-center justify-center text-sm">
+                                            {badge.name[0]?.toUpperCase()}
+                                        </div>
+                                    )}
+                                    <div>
+                                        <div className="font-semibold">{badge.name}</div>
+                                        <div className="text-xs text-gray-400">
+                                            {badge.description}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setEarnedBadges([])}
+                            className="mt-6 w-full py-2 rounded-lg bg-gradient-to-r from-[#C92337] to-[#E16237] hover:from-[#E16237] hover:to-[#DBA64A] font-semibold"
+                        >
+                            Nice!
+                        </button>
+                    </div>
+                </div>
+            )}
+
+        </div>
     )
 }

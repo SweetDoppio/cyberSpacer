@@ -1,4 +1,5 @@
 from backend import create_app
+from backend.extensions import db
 
 app = create_app()
 
