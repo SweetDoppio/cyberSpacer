@@ -1,27 +1,19 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
-import "./globals.css"
+// frontend/src/app/layout.tsx
+import React, { Suspense } from "react";
+import "../global.css";
 
-export const metadata: Metadata = {
-    title: "Cybernauts - Master Cybersecurity",
-    description: "Navigate the digital frontier with expert cybersecurity training",
-}
+type LayoutProps = {
+    children: React.ReactNode;
+};
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode
-}>) {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <html lang="en">
-        <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
-        <Analytics />
-        </body>
-        </html>
-    )
-}
+        <div className="font-sans min-h-screen bg-black text-white">
+            <Suspense fallback={null}>
+                {children}
+            </Suspense>
+        </div>
+    );
+};
+
+export default Layout;

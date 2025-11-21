@@ -15,8 +15,10 @@ if TYPE_CHECKING:
 BASE_REQ = 83
 GROWTH   = 1.8
 
+
 class UserStats(db.Model):
     __tablename__ = "user_stats"
+
     __table_args__ = (
         CheckConstraint("days_logged_in >= 0",name="ck_stats_days_logged_in_non_neg"),
         CheckConstraint("quizzes_completed >= 0",name="ck_stats_quizzes_non_neg"),
@@ -27,7 +29,8 @@ class UserStats(db.Model):
         CheckConstraint("xp_in_level >= 0", name="ck_stats_xp_in_level_non_neg"),
         CheckConstraint("xp_to_next > 0", name="ck_stats_xp_to_next_pos"),
 
-        Index("ix_user_stats_total_xp", "total_xp")
+        Index("ix_user_stats_total_xp", "total_xp"),
+        {"extend_existing": True}
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

@@ -11,3 +11,4 @@ Flask-Migrate
 Flask-Login
 psycopg[binary]
 python-dotenv
+

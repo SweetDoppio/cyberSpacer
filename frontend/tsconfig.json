@@ -1,23 +1,32 @@
-  {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
+{
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
 
-    "declaration": true,
-    "declarationMap": true,
-    "composite": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
     "noEmit": true,
-    "types": ["node"],
-  "baseUrl": ".",
-  "paths": {
-    "@/*": ["src/*"],
-    "@/components/*": ["src/components/*"]
-  }
-},
+    "jsx": "react-jsx",
 
+    /* Linting & Strictness */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/components/*": ["src/components/*"]
+    },
+
+    "types": ["node"]
+  },
   "include": ["src"]
-
 }

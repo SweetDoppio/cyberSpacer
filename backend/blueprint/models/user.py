@@ -17,6 +17,8 @@ class User(db.Model, UserMixin):
     #PGadmin is gonna reference tablename not the class name
     #For testing name = 'cybernaut' password = 'password123' email = 'cybernaut@gmail.com'
     __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
+
 
     id: Mapped[int] = mapped_column(autoincrement=True, primary_key=True)
     first_name: Mapped[str] = mapped_column(String(50), index=True, nullable=False, unique=False)

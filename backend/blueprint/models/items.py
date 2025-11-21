@@ -22,6 +22,7 @@ class UserItems(db.Model):
             """,
             name="ck_items_level_cap",
         ),
+        {"extend_existing": True}
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

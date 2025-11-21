@@ -6,10 +6,12 @@ from backend.extensions import db
 
 # Association table for User <-> Badge (many-to-many)
 user_badges = db.Table(
+
     "user_badges",
     db.Column("user_id",  db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
     db.Column("badge_id", db.Integer, db.ForeignKey("badges.id", ondelete="CASCADE"), primary_key=True),
     db.UniqueConstraint("user_id", "badge_id", name="uq_user_badge"),
+    extend_existing=True,
 )
 
 if TYPE_CHECKING:
@@ -18,7 +20,7 @@ if TYPE_CHECKING:
 
 class Badge(db.Model):
     __tablename__ = "badges"
-
+    __table_args__ = {"extend_existing": True}
     id:   Mapped[int]  = mapped_column(primary_key=True, autoincrement=True)
     slug: Mapped[str]  = mapped_column(String(64), unique=True, index=True, nullable=False)  # e.g. "network-master"
     name: Mapped[str]  = mapped_column(String(100), nullable=False)

@@ -27,6 +27,15 @@ def create_app():
     migrate.init_app(app,db)
     login_manager.init_app(app)
 
+    @app.cli.command("init-db")
+    def init_db():
+        """Initialize the database (create all tables)."""
+        db.drop_all()
+        db.create_all()
+        with app.app_context():
+            db.flush()
+            print("All tables created successfully in", db.engine.url)
+
     @login_manager.unauthorized_handler
     def _unauthorized():
         return jsonify({"error": "login required"}), 401
