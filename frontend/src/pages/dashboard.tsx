@@ -1,7 +1,6 @@
 "use client"
 // @ts-ignore
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:5000"
-
 import {type ChangeEvent, useEffect, useState} from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
